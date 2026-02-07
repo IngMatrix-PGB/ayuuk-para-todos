@@ -1,0 +1,814 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ayuuk para Todos</title>
+
+  <style>
+    :root{
+      --bg: #071225;
+      --text: #f2f6ff;
+
+      --wine: #4b070b;
+      --wine2:#2c0406;
+
+      --dangerRed:#dc2626;
+
+      --r: 16px;
+      --ease: cubic-bezier(.2,.85,.2,1);
+
+      --accent: rgba(37,99,235,.85);
+      --accentSoft: rgba(37,99,235,.18);
+    }
+
+    *{ box-sizing: border-box; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(900px 520px at 65% 18%, rgba(37,99,235,.18), transparent 60%),
+        radial-gradient(700px 440px at 25% 55%, rgba(245,158,11,.12), transparent 62%),
+        linear-gradient(135deg, #061021, var(--bg));
+      min-height: 100vh;
+      overflow-x:hidden;
+    }
+
+    body::before{
+      content:"";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .16;
+      background-image:
+        linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: radial-gradient(60% 50% at 55% 25%, black 55%, transparent 100%);
+    }
+
+    button{ font-family: inherit; }
+
+    .app{
+      display:grid;
+      grid-template-columns: 340px 1fr;
+      min-height: 100vh;
+    }
+    @media (max-width: 940px){
+      .app{ grid-template-columns: 1fr; }
+    }
+
+    /* ===== Sidebar ===== */
+    .sidebar{
+      background: linear-gradient(180deg, var(--wine), var(--wine2));
+      border-right: 2px solid rgba(0,0,0,.45);
+      padding: 18px 16px 18px;
+      position: relative;
+    }
+    .sidebar::after{
+      content:"";
+      position:absolute;
+      inset: 0;
+      pointer-events:none;
+      background: radial-gradient(480px 220px at 50% 0%, rgba(255,255,255,.08), transparent 60%);
+      opacity:.9;
+    }
+
+    .side-title{
+      position: relative;
+      z-index: 1;
+      font-weight: 1000;
+      letter-spacing: .9px;
+      font-size: 22px;
+      margin: 6px 0 14px;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .menu{
+      position: relative;
+      z-index: 1;
+      display:flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .submenu{
+      position: relative;
+      z-index: 1;
+      display:flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-left: 0; /* ✅ sin bolita, sin indent */
+      margin-top: 2px;
+    }
+
+    .sub-btn{
+      background: rgba(0,0,0,.22);
+      border: 2px solid rgba(0,0,0,.60);
+      color: rgba(242,246,255,.95);
+      border-radius: 12px;
+      padding: 14px 12px;
+      cursor:pointer;
+      text-align:left;
+
+      font-weight: 950;
+      letter-spacing: .2px;
+      font-size: 16px;
+
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+
+      transition: transform .14s var(--ease), background .14s var(--ease), box-shadow .14s var(--ease), border-color .14s var(--ease);
+      outline:none;
+      text-decoration:none;
+    }
+
+    .sub-btn:hover,
+    .sub-btn:focus-visible{
+      transform: scale(1.05);
+      background: rgba(255,255,255,.10);
+      border-color: rgba(255,255,255,.22);
+      box-shadow: 0 16px 34px rgba(0,0,0,.36);
+    }
+
+    .sub-left{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .sub-ico{
+      width: 30px; height: 30px;
+      border-radius: 10px;
+      border: 2px solid rgba(0,0,0,.55);
+      background: rgba(255,255,255,.18);
+      display:grid; place-items:center;
+      font-size: 15px;
+      flex: 0 0 auto;
+    }
+
+    /* ===== Main ===== */
+    .main{
+      padding: 14px 18px 132px; /* ✅ menos padding arriba */
+      position: relative;
+      display:flex;
+      flex-direction: column;
+      gap: 12px;               /* ✅ sube contenido (menos separación) */
+      min-height: 100vh;
+    }
+
+    .hero{
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: var(--r);
+      padding: 14px 16px; /* ✅ un poco más compacto */
+      box-shadow: 0 18px 44px rgba(0,0,0,.36);
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      flex: 0 0 auto;
+    }
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: radial-gradient(520px 190px at 22% 0%, rgba(255,204,74,.22), transparent 60%);
+      pointer-events:none;
+      opacity:.9;
+    }
+    .hero h1{
+      margin:0;
+      font-size: 32px;
+      font-weight: 1000;
+      letter-spacing: .35px;
+      line-height: 1.05;
+      text-shadow: 0 12px 28px rgba(0,0,0,.55);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== STAGE ===== */
+    .stage{
+      flex: 1 1 auto;
+      border-radius: var(--r);
+      overflow: hidden;
+      position: relative;
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 18px 44px rgba(0,0,0,.36);
+
+      width: 100%;
+      max-width: 980px;   /* ✅ más tight */
+      margin: 0 auto;
+
+      min-height: 320px;  /* ✅ menos alto = menos vacío */
+      max-height: 58vh;
+
+      background: rgba(255,255,255,.03);
+    }
+
+    .stage::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(700px 320px at 18% 12%, rgba(0,0,0,.10), transparent 60%),
+        linear-gradient(180deg, rgba(0,0,0,.06), rgba(0,0,0,.18));
+      z-index: 1;
+    }
+
+    /* ===== HOME SLIDER ===== */
+    .home-slider{
+      position:absolute;
+      inset:0;
+      z-index: 2;
+      display:block;
+    }
+
+    .slides{
+      position:absolute;
+      inset:0;
+      display:grid;
+      place-items:center;
+      background: rgba(0,0,0,.18);
+    }
+
+    .slide-img{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit: contain;
+      background: rgba(0,0,0,.22);
+      display:block;
+      filter: saturate(1.04) contrast(1.02);
+      opacity: 0;
+      transform: scale(1.01);
+      transition: opacity .65s var(--ease), transform .85s var(--ease);
+    }
+
+    .slide-img.active{
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .stage-hud{
+      position:absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 14px;
+      z-index: 3;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .caption{
+      pointer-events:none;
+      background: rgba(0,0,0,.42);
+      border: 1px solid rgba(255,255,255,.12);
+      padding: 10px 12px;
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 16px 34px rgba(0,0,0,.32);
+      max-width: 72%;
+      font-size: 13px;
+      line-height: 1.3;
+      color: rgba(242,246,255,.96);
+    }
+
+    .dots{
+      display:flex;
+      gap: 8px;
+      pointer-events: auto;
+    }
+
+    .dotbtn{
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.18);
+      box-shadow: 0 6px 16px rgba(0,0,0,.35);
+      cursor:pointer;
+      padding:0;
+      outline:none;
+      transition: transform .18s var(--ease), background .18s var(--ease), border-color .18s var(--ease);
+    }
+    .dotbtn:hover{ transform: scale(1.2); }
+    .dotbtn.active{
+      background: rgba(37,99,235,.55);
+      border-color: rgba(37,99,235,.85);
+    }
+
+    .stage-controls{
+      position:absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 4;
+      display:flex;
+      gap: 8px;
+    }
+    .ctrl{
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.35);
+      color: rgba(242,246,255,.95);
+      border-radius: 12px;
+      padding: 9px 10px;
+      cursor:pointer;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 14px 30px rgba(0,0,0,.28);
+      font-weight: 850;
+      letter-spacing: .2px;
+      transition: transform .14s var(--ease), background .14s var(--ease), border-color .14s var(--ease);
+    }
+    .ctrl:hover{ transform: translateY(-1px); background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.22); }
+
+    /* ===== IFRAME (LETRAS) =====
+       ✅ SIN marco extra: ya lo pone .stage (solo 1 contorno)
+    */
+    .frame-wrap{
+      position:absolute;
+      inset: 0;         /* ✅ ocupa todo el stage */
+      z-index: 5;
+      display:none;
+
+      border: 0;        /* ✅ quita borde */
+      background: transparent;
+      box-shadow: none;
+      overflow: hidden;
+
+      padding: 14px;    /* ✅ respiración interna (sin marco) */
+    }
+
+    .letter-frame{
+      position: relative;  /* ✅ para que respete el padding del wrap */
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display:block;
+      background: transparent !important;
+      border-radius: 14px;
+    }
+
+    /* ===== Alphabet bar ===== */
+    .alpha{
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 40;
+      background: linear-gradient(180deg, rgba(10,20,45,.90), rgba(5,10,22,.96));
+      border-top: 1px solid rgba(255,255,255,.14);
+      padding: 14px 14px 18px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 -18px 40px rgba(0,0,0,.45);
+    }
+
+    .alpha .title{
+      text-align:center;
+      font-weight: 1100;
+      letter-spacing: 2px;
+      color: rgba(255,82,82,1);
+      text-transform: uppercase;
+      font-size: 20px;
+      margin-bottom: 12px;
+      text-shadow:
+        0 3px 0 rgba(0,0,0,.68),
+        0 14px 30px rgba(0,0,0,.70);
+    }
+
+    .letters{
+      display:flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .letter{
+      width: 62px;
+      height: 62px;
+      border-radius: 16px;
+      display:grid;
+      place-items:center;
+
+      background:
+        radial-gradient(18px 18px at 30% 28%, rgba(255,255,255,.26), transparent 70%),
+        linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.08));
+      border: 2px solid rgba(255,255,255,.22);
+
+      color: rgba(242,246,255,.96);
+      font-weight: 1100;
+      cursor:pointer;
+      user-select:none;
+
+      font-size: 22px;
+      letter-spacing: .7px;
+
+      box-shadow:
+        0 10px 0 rgba(0,0,0,.24),
+        0 18px 34px rgba(0,0,0,.28);
+      transition: transform .18s var(--ease), background .18s var(--ease), border-color .18s var(--ease), box-shadow .18s var(--ease), color .18s var(--ease);
+      outline:none;
+    }
+
+    .letter.hovered{
+      transform: scale(1.24);
+      background:
+        radial-gradient(18px 18px at 30% 28%, rgba(255,255,255,.34), transparent 70%),
+        linear-gradient(180deg, rgba(37,99,235,.34), rgba(255,255,255,.10));
+      border-color: rgba(37,99,235,.75);
+      color: #ffffff;
+      box-shadow:
+        0 12px 0 rgba(0,0,0,.28),
+        0 24px 48px rgba(0,0,0,.40);
+    }
+
+    .letter.active{
+      transform: scale(1.12);
+      background:
+        radial-gradient(18px 18px at 30% 28%, rgba(255,255,255,.34), transparent 70%),
+        linear-gradient(180deg, rgba(37,99,235,.34), rgba(255,255,255,.10));
+      border-color: rgba(37,99,235,.75);
+      color: #ffffff;
+      box-shadow:
+        0 12px 0 rgba(0,0,0,.28),
+        0 24px 48px rgba(0,0,0,.40);
+    }
+
+    @media (max-width: 940px){
+      .sidebar{
+        border-right:none;
+        border-bottom: 2px solid rgba(0,0,0,.45);
+      }
+      .hero h1{ font-size: 28px; }
+      .letter{ width: 54px; height: 54px; font-size: 20px; }
+      .letters{ gap: 12px; }
+      .alpha .title{ font-size: 16px; }
+      .stage{ max-height: 56vh; min-height: 300px; }
+      .frame-wrap{ padding: 12px; }
+    }
+
+    /* Toast */
+    .toast{
+      position: fixed;
+      left: 50%;
+      bottom: 132px;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,.74);
+      border: 1px solid rgba(255,255,255,.14);
+      color: rgba(242,246,255,.98);
+      padding: 10px 12px;
+      border-radius: 12px;
+      box-shadow: 0 16px 40px rgba(0,0,0,.35);
+      backdrop-filter: blur(10px);
+      max-width: min(760px, calc(100vw - 28px));
+      font-size: 13px;
+      line-height: 1.35;
+      display:none;
+      z-index: 60;
+    }
+    .toast.show{ display:block; }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="side-title">MENU DE OPCIONES</div>
+
+      <nav class="menu" aria-label="Menú">
+        <div class="submenu">
+          <button class="sub-btn" type="button" data-view="home">
+            <span class="sub-left">
+              <span class="sub-ico" aria-hidden="true">🏠</span>
+              Inicio
+            </span>
+            <span aria-hidden="true">›</span>
+          </button>
+
+          <a class="sub-btn" href="1-10-A.html">
+            <span class="sub-left">
+              <span class="sub-ico" aria-hidden="true">🔢</span>
+              Números
+            </span>
+            <span aria-hidden="true">›</span>
+          </a>
+
+          <button class="sub-btn" type="button" data-toast="Próximamente: Colores.">
+            <span class="sub-left">
+              <span class="sub-ico" aria-hidden="true">🎨</span>
+              Colores
+            </span>
+            <span aria-hidden="true">›</span>
+          </button>
+
+          <button class="sub-btn" type="button" data-toast="Próximamente: Animales.">
+            <span class="sub-left">
+              <span class="sub-ico" aria-hidden="true">🐾</span>
+              Animales
+            </span>
+            <span aria-hidden="true">›</span>
+          </button>
+
+          <button class="sub-btn" type="button" data-toast="Próximamente: Insectos.">
+            <span class="sub-left">
+              <span class="sub-ico" aria-hidden="true">🪲</span>
+              Insectos
+            </span>
+            <span aria-hidden="true">›</span>
+          </button>
+
+          <button class="sub-btn" type="button" data-toast="Próximamente: Figuras geométricas.">
+            <span class="sub-left">
+              <span class="sub-ico" aria-hidden="true">🔺</span>
+              Figuras geométricas
+            </span>
+            <span aria-hidden="true">›</span>
+          </button>
+
+          <button class="sub-btn" type="button" data-toast="Próximamente: Fenómenos naturales.">
+            <span class="sub-left">
+              <span class="sub-ico" aria-hidden="true">🌩️</span>
+              Fenómenos naturales
+            </span>
+            <span aria-hidden="true">›</span>
+          </button>
+
+          <button class="sub-btn" type="button" data-toast="Próximamente: Naturaleza.">
+            <span class="sub-left">
+              <span class="sub-ico" aria-hidden="true">🌿</span>
+              Naturaleza
+            </span>
+            <span aria-hidden="true">›</span>
+          </button>
+
+          <button class="sub-btn" type="button" data-toast="Próximamente: Familia y parentesco.">
+            <span class="sub-left">
+              <span class="sub-ico" aria-hidden="true">👨‍👩‍👧</span>
+              Familia y parentesco
+            </span>
+            <span aria-hidden="true">›</span>
+          </button>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <section class="hero">
+        <h1>Ayuuk para Todos</h1>
+      </section>
+
+      <section class="stage" aria-label="Contenido principal">
+        <!-- HOME (Slider) -->
+        <div class="home-slider" id="homeSlider" aria-label="Galería principal">
+          <div class="stage-controls" aria-label="Controles">
+            <button class="ctrl" id="prevBtn" type="button" title="Anterior">‹</button>
+            <button class="ctrl" id="pauseBtn" type="button" title="Pausar/Reanudar">⏯</button>
+            <button class="ctrl" id="nextBtn" type="button" title="Siguiente">›</button>
+          </div>
+
+          <div class="slides" id="slides" aria-live="polite"></div>
+
+          <div class="stage-hud">
+            <div class="caption" id="caption">Cargando…</div>
+            <div class="dots" id="dots" aria-label="Indicadores"></div>
+          </div>
+        </div>
+
+        <!-- LETRAS (iframe) -->
+        <div class="frame-wrap" id="frameWrap" aria-label="Diccionario por letra">
+          <iframe class="letter-frame"
+                  id="letterFrame"
+                  title="Letra"
+                  src="about:blank"></iframe>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="alpha" role="navigation" aria-label="Alfabeto Mixe">
+    <div class="title">ELIGE UNA LETRA PARA BUSCAR UNA PALABRA</div>
+    <div class="letters" id="letters"></div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    /* =========================
+       Toast
+    ========================= */
+    const toastEl = document.getElementById("toast");
+    let toastTimer;
+
+    function toast(msg){
+      clearTimeout(toastTimer);
+      toastEl.textContent = msg;
+      toastEl.classList.add("show");
+      toastTimer = setTimeout(() => toastEl.classList.remove("show"), 2200);
+    }
+
+    document.addEventListener("click", (e) => {
+      const t = e.target.closest("[data-toast]");
+      if (t){
+        e.preventDefault();
+        toast(t.getAttribute("data-toast") || "Próximamente.");
+      }
+    });
+
+    /* =========================
+       HOME <-> LETRAS (UI)
+    ========================= */
+    const homeSlider = document.getElementById("homeSlider");
+    const frameWrap  = document.getElementById("frameWrap");
+    const letterFrame = document.getElementById("letterFrame");
+
+    const AVAILABLE = new Set(["M"]); // por ahora
+
+    function showHome(){
+      frameWrap.style.display = "none";
+      homeSlider.style.display = "block";
+      setActiveLetter(null);
+    }
+
+    function showLetter(letter){
+      if (!AVAILABLE.has(letter)){
+        toast(`Letra ${letter}: próximamente`);
+        return;
+      }
+
+      homeSlider.style.display = "none";
+      frameWrap.style.display = "block";
+      letterFrame.src = `letras-spa-lite/${letter}.html`;
+
+      setActiveLetter(letter);
+    }
+
+    /* =========================
+       Alfabeto Mixe
+    ========================= */
+    const letters = ["A","E","I","J","K","M","N","O","P","T","U","W","X","Y"];
+    const lettersWrap = document.getElementById("letters");
+    const shrinkDelayMs = 200;
+
+    function setActiveLetter(L){
+      document.querySelectorAll(".letter").forEach(btn => {
+        btn.classList.toggle("active", L && btn.dataset.letter === L);
+      });
+    }
+
+    letters.forEach(L => {
+      const b = document.createElement("button");
+      b.className = "letter";
+      b.type = "button";
+      b.textContent = L;
+      b.dataset.letter = L;
+
+      let shrinkTimer = null;
+      const setHover = () => { if (shrinkTimer) clearTimeout(shrinkTimer); b.classList.add("hovered"); };
+      const clearHoverDelayed = () => { if (shrinkTimer) clearTimeout(shrinkTimer); shrinkTimer = setTimeout(() => b.classList.remove("hovered"), shrinkDelayMs); };
+
+      b.addEventListener("mouseenter", setHover);
+      b.addEventListener("mouseleave", clearHoverDelayed);
+      b.addEventListener("focus", setHover);
+      b.addEventListener("blur", clearHoverDelayed);
+
+      b.addEventListener("click", () => showLetter(L));
+      lettersWrap.appendChild(b);
+    });
+
+    /* Sidebar: Inicio */
+    document.addEventListener("click", (e) => {
+      const v = e.target.closest("[data-view]");
+      if (!v) return;
+      const view = v.getAttribute("data-view");
+      if (view === "home") showHome();
+    });
+
+    /* =========================
+       Slider (HOME)
+    ========================= */
+    const SLIDES = [
+      { src: "FondoDicMixe.png", caption: "Cultura Mixe de Guichicovi (arte/identidad)" },
+      { src: "Ada.jpeg",         caption: "Ayuuk vivo: música, vestimenta y orgullo" },
+      { src: "TeamAda.jpeg",     caption: "Comunidad y aprendizaje: juntos se hace grande" }
+    ];
+
+    const slidesEl = document.getElementById("slides");
+    const captionEl = document.getElementById("caption");
+    const dotsEl = document.getElementById("dots");
+
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const pauseBtn = document.getElementById("pauseBtn");
+
+    let imgs = [];
+    let dots = [];
+    let current = 0;
+    let isPaused = false;
+    const INTERVAL_MS = 5200;
+    let timer = null;
+    let visibleSlides = [];
+
+    function setActive(idx){
+      if (!imgs.length) return;
+      current = (idx + imgs.length) % imgs.length;
+
+      imgs.forEach((img, i) => img.classList.toggle("active", i === current));
+      dots.forEach((d, i) => d.classList.toggle("active", i === current));
+
+      captionEl.textContent = visibleSlides[current]?.caption || "";
+    }
+
+    function next(){ setActive(current + 1); }
+    function prev(){ setActive(current - 1); }
+
+    function startAuto(){
+      stopAuto();
+      timer = setInterval(() => {
+        if (homeSlider.style.display !== "none" && !isPaused) next();
+      }, INTERVAL_MS);
+    }
+
+    function stopAuto(){
+      if (timer) clearInterval(timer);
+      timer = null;
+    }
+
+    function togglePause(){
+      isPaused = !isPaused;
+      toast(isPaused ? "Pausa: slider detenido" : "Reanudado");
+    }
+
+    async function initSlider(){
+      slidesEl.innerHTML = "";
+      dotsEl.innerHTML = "";
+      imgs = [];
+      dots = [];
+      visibleSlides = [];
+
+      for (const s of SLIDES){
+        const ok = await new Promise((resolve) => {
+          const test = new Image();
+          test.onload = () => resolve(true);
+          test.onerror = () => resolve(false);
+          test.src = s.src;
+        });
+        if (!ok){
+          toast(`No se encontró: ${s.src} (se omitió del slider)`);
+          continue;
+        }
+        visibleSlides.push(s);
+      }
+
+      if (!visibleSlides.length){
+        captionEl.textContent = "No hay imágenes (revisa nombres/archivos).";
+        return;
+      }
+
+      visibleSlides.forEach((s, i) => {
+        const img = document.createElement("img");
+        img.className = "slide-img";
+        img.alt = s.caption || "Imagen";
+        img.src = s.src;
+        slidesEl.appendChild(img);
+        imgs.push(img);
+
+        const dot = document.createElement("button");
+        dot.className = "dotbtn";
+        dot.type = "button";
+        dot.setAttribute("aria-label", `Slide ${i+1}`);
+        dot.addEventListener("click", () => { setActive(i); toast("Slide seleccionado"); });
+        dotsEl.appendChild(dot);
+        dots.push(dot);
+      });
+
+      setActive(0);
+      startAuto();
+    }
+
+    prevBtn.addEventListener("click", () => prev());
+    nextBtn.addEventListener("click", () => next());
+    pauseBtn.addEventListener("click", () => togglePause());
+
+    const stageEl = document.querySelector(".stage");
+    stageEl.addEventListener("mouseenter", () => { isPaused = true; });
+    stageEl.addEventListener("mouseleave", () => { isPaused = false; });
+
+    showHome();
+    initSlider();
+  </script>
+</body>
+</html>

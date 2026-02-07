@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Números Mixe 1–10 (demo)</title>
+  <style>
+    :root{
+      --bg1:#0b3d91;      /* azul profundo */
+      --bg2:#0a2b5e;
+      --card:#0f1b2d;
+      --stroke:#2a5bd7;
+      --text:#eaf2ff;
+      --muted:#b7c7ff;
+      --accent:#ff2d2d;   /* rojo para número */
+    }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background: radial-gradient(1200px 600px at 30% 20%, #1b66ff33, transparent 60%),
+                  linear-gradient(135deg, var(--bg1), var(--bg2));
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+    .wrap{max-width:980px; width:100%;}
+    .header{
+      display:flex; align-items:flex-end; justify-content:space-between; gap:16px;
+      margin-bottom:16px;
+    }
+    h1{font-size:22px; margin:0; letter-spacing:.3px;}
+    .hint{
+      font-size:14px; color:var(--muted);
+      border:1px solid #ffffff1f; padding:10px 12px; border-radius:12px;
+      background:#00000026;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap:14px;
+    }
+    .card{
+      background: linear-gradient(180deg, #0f1b2d, #0b1424);
+      border:1px solid #ffffff1a;
+      border-radius:18px;
+      padding:14px 14px 12px;
+      cursor:pointer;
+      transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease;
+      box-shadow: 0 10px 26px #00000035;
+      user-select:none;
+      position:relative;
+      overflow:hidden;
+    }
+    .card:hover{
+      transform: scale(1.05);
+      border-color: #7aa2ff66;
+      box-shadow: 0 14px 34px #00000055;
+    }
+    .mixe{
+      font-weight:700;
+      font-size:16px;
+      color:var(--text);
+      margin-bottom:8px;
+      letter-spacing:.2px;
+    }
+    .num{
+      font-size:58px;
+      line-height:1;
+      font-weight:900;
+      text-align:center;
+      color:var(--accent);
+      text-shadow: 0 4px 0 #8a0000, 0 10px 20px #00000066;
+      margin:6px 0 6px;
+    }
+    .es{
+      font-size:15px;
+      color:var(--muted);
+      text-align:center;
+    }
+    .tag{
+      position:absolute; top:10px; right:10px;
+      font-size:11px; padding:4px 8px; border-radius:999px;
+      background:#ffffff14; border:1px solid #ffffff22; color:#dbe7ff;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <h1>Números en Ayuuk (Mixe) — 1 a 10</h1>
+      <div class="hint">Pasa el cursor sobre un número para escucharlo. Haz clic para repetir.</div>
+    </div>
+
+    <div id="grid" class="grid"></div>
+  </div>
+
+<script>
+  // Dataset 1–10 (tomado del archivo rescatado)
+  const data = [
+    {n:1, mixe:"Tu'ug",   es:"Uno"},
+    {n:2, mixe:"Metsk",   es:"Dos"},
+    {n:3, mixe:"Tëgëëg",  es:"Tres"},
+    {n:4, mixe:"Madaaxk", es:"Cuatro"},
+    {n:5, mixe:"Mogooxk", es:"Cinco"},
+    {n:6, mixe:"Tëdujk",  es:"Seis"},
+    {n:7, mixe:"Juxtujk", es:"Siete"},
+    {n:8, mixe:"Tuktujk", es:"Ocho"},
+    {n:9, mixe:"Taaxtujk",es:"Nueve"},
+    {n:10,mixe:"Majk",    es:"Diez"},
+  ];
+
+  // Beep “dummy” con WebAudio (para probar el hover/click)
+  let audioCtx;
+  function beep(freq=660, ms=120){
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = "sine";
+    o.frequency.value = freq;
+    o.connect(g);
+    g.connect(audioCtx.destination);
+
+    const now = audioCtx.currentTime;
+    g.gain.setValueAtTime(0.0001, now);
+    g.gain.exponentialRampToValueAtTime(0.15, now + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + ms/1000);
+
+    o.start(now);
+    o.stop(now + ms/1000);
+  }
+
+  const grid = document.getElementById("grid");
+  for (const item of data) {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <div class="tag">#${item.n}</div>
+      <div class="mixe">${item.mixe}</div>
+      <div class="num">${item.n}</div>
+      <div class="es">${item.es}</div>
+    `;
+
+    // Hover: sonido breve (solo 1 vez por entrada)
+    let armed = true;
+    card.addEventListener("mouseenter", () => {
+      if (!armed) return;
+      armed = false;
+      beep(520 + item.n*30, 110);
+      setTimeout(()=> armed=true, 250);
+    });
+
+    // Click: repetir audio
+    card.addEventListener("click", () => beep(520 + item.n*30, 160));
+
+    grid.appendChild(card);
+  }
+</script>
+</body>
+</html>
