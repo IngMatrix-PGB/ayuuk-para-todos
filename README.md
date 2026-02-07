@@ -1,6 +1,3 @@
-# ayuuk-para-todos
-Tecnología moderna aplicada al rescate y enseñanza de la lengua Ayuuk (Mixe).
-
 # Ayuuk para Todos
 
 Proyecto comunitario para el rescate, enseñanza y preservación digital de la lengua Ayuuk (Mixe).
