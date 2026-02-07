@@ -11,12 +11,16 @@ Crear un diccionario multimedia interactivo con:
 
 ## 🤝 Comunidad
 Este proyecto existe gracias a:
-- Colaboradores de voz:
-  Profa. Ginaloyobrigida Cruz Iturbe
-  Profa. Mercedes Azcona Figueroa
-  C. Sulamita Cayetano Matías
-  Madelin Escobedo Cayetano
-  Profa. Ausencia Juan Andres
+## 🎙️ Colaboradores de voz
+La lengua vive porque se habla.  
+Este acervo digital existe gracias a la comunidad y a quienes compartieron su voz:
+- **Profa. Ginaloyobrigida Cruz Iturbe**
+- **Profa. Mercedes Azcona Figueroa**
+- **C. Sulamita Cayetano Matías**
+- **Madelin Escobedo Cayetano**
+- **Profa. Ausencia Juan Andrés**
+
+Este proyecto honra su contribución.
   
 - Comunidad Ayuuk
 - Tecnología abierta
