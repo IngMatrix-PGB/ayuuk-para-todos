@@ -20,6 +20,9 @@
 
       --accent: rgba(37,99,235,.85);
       --accentSoft: rgba(37,99,235,.18);
+
+      /* ✅ altura dinámica de barra alfabeto (se setea por JS) */
+      --alphaH: 120px;
     }
 
     *{ box-sizing: border-box; }
@@ -155,7 +158,8 @@
 
     /* ===== Main ===== */
     .main{
-      padding: 14px 18px 132px;
+      /* ✅ padding-bottom dinámico según altura real de .alpha */
+      padding: 14px 18px calc(var(--alphaH, 120px) + 24px);
       position: relative;
       display:flex;
       flex-direction: column;
@@ -459,49 +463,70 @@
       .frame-wrap{ padding: 12px; }
     }
 
-    /* ==========================================================
-       ✅ MOBILE UX PACK (<= 600px)
-       - Alpha en 1 fila con scroll horizontal
-       - Menos alto + letras más compactas
-       - Stage/slider no empuja contenido
-       - Title más suave (sin sombra fuerte)
-       ========================================================== */
+    /* =========================
+       ✅ Mobile tighten (<=600px)
+    ========================= */
     @media (max-width: 600px){
+
+      /* Sidebar más compacta */
+      .sidebar{
+        padding: 12px 12px 12px;
+      }
+      .side-title{
+        font-size: 18px;
+        margin: 4px 0 10px;
+        letter-spacing: .6px;
+      }
+      .menu, .submenu{
+        gap: 10px;
+      }
+      .sub-btn{
+        padding: 12px 12px;
+        font-size: 15px;
+        border-radius: 14px;
+      }
+      .sub-ico{
+        width: 28px; height: 28px;
+        border-radius: 10px;
+        font-size: 14px;
+      }
+
+      /* Stage: que no empuje todo hacia abajo */
+      .stage{
+        max-height: 45vh;
+        min-height: 240px;
+      }
+
+      /* Alpha bar: 1 fila con scroll horizontal y menos alto */
       .alpha{
-        padding: 10px 8px 12px;
+        padding: 10px 10px 12px;
       }
 
       .alpha .title{
         font-size: 14px;
         letter-spacing: 1px;
         text-shadow: none;
-        color: rgba(255, 120, 120, 0.90);
+        color: rgba(255, 120, 120, 0.9);
         margin-bottom: 8px;
       }
 
       .letters{
         flex-wrap: nowrap;
         overflow-x: auto;
+        overflow-y: hidden;
         justify-content: flex-start;
+        gap: 10px;
         padding-bottom: 4px;
         -webkit-overflow-scrolling: touch;
-        gap: 10px;
+        scroll-snap-type: x mandatory;
       }
-
-      /* opcional: scrollbar discreto */
-      .letters::-webkit-scrollbar{ height: 6px; }
-      .letters::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.18); border-radius: 999px; }
 
       .letter{
         width: 48px;
         height: 48px;
         font-size: 18px;
         flex: 0 0 auto;
-      }
-
-      .stage{
-        max-height: 45vh;
-        min-height: 260px;
+        scroll-snap-align: start;
       }
     }
 
@@ -509,7 +534,7 @@
     .toast{
       position: fixed;
       left: 50%;
-      bottom: 132px;
+      bottom: calc(var(--alphaH, 120px) + 12px);
       transform: translateX(-50%);
       background: rgba(0,0,0,.74);
       border: 1px solid rgba(255,255,255,.14);
@@ -525,11 +550,6 @@
       z-index: 60;
     }
     .toast.show{ display:block; }
-
-    /* ✅ modo touch: evita efectos “hover grandes” en móvil */
-    body.is-touch .letter.hovered{
-      transform: scale(1.08);
-    }
   </style>
 </head>
 
@@ -657,22 +677,6 @@
 
   <script>
     /* =========================
-       ✅ Detectar móvil/touch y activar modo táctil
-    ========================= */
-    const isTouch =
-      window.matchMedia?.("(pointer: coarse)").matches ||
-      "ontouchstart" in window ||
-      navigator.maxTouchPoints > 0;
-
-    if (isTouch) document.body.classList.add("is-touch");
-
-    function haptic(ms = 10){
-      try{
-        if (isTouch && navigator.vibrate) navigator.vibrate(ms);
-      }catch(e){}
-    }
-
-    /* =========================
        Toast
     ========================= */
     const toastEl = document.getElementById("toast");
@@ -690,9 +694,29 @@
       if (t){
         e.preventDefault();
         toast(t.getAttribute("data-toast") || "Próximamente.");
-        haptic(10);
       }
     });
+
+    /* =========================
+       ✅ Touch mode + alpha height (quita huecos)
+    ========================= */
+    const isTouch =
+      window.matchMedia?.("(pointer: coarse)")?.matches ||
+      "ontouchstart" in window ||
+      navigator.maxTouchPoints > 0;
+
+    if (isTouch) document.body.classList.add("is-touch");
+
+    function updateAlphaHeight(){
+      const alpha = document.querySelector(".alpha");
+      if (!alpha) return;
+      const h = Math.ceil(alpha.getBoundingClientRect().height);
+      document.documentElement.style.setProperty("--alphaH", `${h}px`);
+    }
+
+    window.addEventListener("load", updateAlphaHeight);
+    window.addEventListener("resize", updateAlphaHeight);
+    window.addEventListener("orientationchange", updateAlphaHeight);
 
     /* =========================
        HOME <-> LETRAS (UI)
@@ -703,10 +727,17 @@
 
     const AVAILABLE = new Set(["M"]); // por ahora
 
+    function setActiveLetter(L){
+      document.querySelectorAll(".letter").forEach(btn => {
+        btn.classList.toggle("active", L && btn.dataset.letter === L);
+      });
+    }
+
     function showHome(){
       frameWrap.style.display = "none";
       homeSlider.style.display = "block";
       setActiveLetter(null);
+      requestAnimationFrame(updateAlphaHeight);
     }
 
     function showLetter(letter){
@@ -720,6 +751,7 @@
       letterFrame.src = `letras-spa-lite/${letter}.html`;
 
       setActiveLetter(letter);
+      requestAnimationFrame(updateAlphaHeight);
     }
 
     /* =========================
@@ -729,12 +761,6 @@
     const lettersWrap = document.getElementById("letters");
     const shrinkDelayMs = 200;
 
-    function setActiveLetter(L){
-      document.querySelectorAll(".letter").forEach(btn => {
-        btn.classList.toggle("active", L && btn.dataset.letter === L);
-      });
-    }
-
     letters.forEach(L => {
       const b = document.createElement("button");
       b.className = "letter";
@@ -743,29 +769,15 @@
       b.dataset.letter = L;
 
       let shrinkTimer = null;
-
-      // ✅ en touch evitamos hover agresivo
-      const setHover = () => {
-        if (isTouch) return;
-        if (shrinkTimer) clearTimeout(shrinkTimer);
-        b.classList.add("hovered");
-      };
-      const clearHoverDelayed = () => {
-        if (isTouch) return;
-        if (shrinkTimer) clearTimeout(shrinkTimer);
-        shrinkTimer = setTimeout(() => b.classList.remove("hovered"), shrinkDelayMs);
-      };
+      const setHover = () => { if (shrinkTimer) clearTimeout(shrinkTimer); b.classList.add("hovered"); };
+      const clearHoverDelayed = () => { if (shrinkTimer) clearTimeout(shrinkTimer); shrinkTimer = setTimeout(() => b.classList.remove("hovered"), shrinkDelayMs); };
 
       b.addEventListener("mouseenter", setHover);
       b.addEventListener("mouseleave", clearHoverDelayed);
       b.addEventListener("focus", setHover);
       b.addEventListener("blur", clearHoverDelayed);
 
-      b.addEventListener("click", () => {
-        haptic(10);
-        showLetter(L);
-      });
-
+      b.addEventListener("click", () => showLetter(L));
       lettersWrap.appendChild(b);
     });
 
@@ -774,10 +786,7 @@
       const v = e.target.closest("[data-view]");
       if (!v) return;
       const view = v.getAttribute("data-view");
-      if (view === "home"){
-        haptic(10);
-        showHome();
-      }
+      if (view === "home") showHome();
     });
 
     /* =========================
@@ -833,7 +842,6 @@
     function togglePause(){
       isPaused = !isPaused;
       toast(isPaused ? "Pausa: slider detenido" : "Reanudado");
-      haptic(10);
     }
 
     async function initSlider(){
@@ -874,11 +882,7 @@
         dot.className = "dotbtn";
         dot.type = "button";
         dot.setAttribute("aria-label", `Slide ${i+1}`);
-        dot.addEventListener("click", () => {
-          setActive(i);
-          toast("Slide seleccionado");
-          haptic(10);
-        });
+        dot.addEventListener("click", () => { setActive(i); toast("Slide seleccionado"); });
         dotsEl.appendChild(dot);
         dots.push(dot);
       });
@@ -887,13 +891,13 @@
       startAuto();
     }
 
-    prevBtn.addEventListener("click", () => { prev(); haptic(10); });
-    nextBtn.addEventListener("click", () => { next(); haptic(10); });
+    prevBtn.addEventListener("click", () => prev());
+    nextBtn.addEventListener("click", () => next());
     pauseBtn.addEventListener("click", () => togglePause());
 
     const stageEl = document.querySelector(".stage");
-    stageEl.addEventListener("mouseenter", () => { if (!isTouch) isPaused = true; });
-    stageEl.addEventListener("mouseleave", () => { if (!isTouch) isPaused = false; });
+    stageEl.addEventListener("mouseenter", () => { isPaused = true; });
+    stageEl.addEventListener("mouseleave", () => { isPaused = false; });
 
     showHome();
     initSlider();

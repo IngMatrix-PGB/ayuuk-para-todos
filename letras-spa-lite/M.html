@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Letra M — Diccionario Ayuuk</title>
+
   <style>
     :root{
       --text: rgba(242,246,255,.96);
@@ -16,6 +17,7 @@
       --border: rgba(255,255,255,.14);
       --muted: rgba(242,246,255,.88);
 
+      /* hint rojo */
       --hintRed: rgba(248,113,113,.98);
       --hintRedGlow: rgba(248,113,113,.22);
     }
@@ -31,7 +33,17 @@
       overflow: auto;
     }
 
-    .wrap{ padding: 14px; }
+    /* ✅ Evita que la barra inferior del index tape las últimas tarjetas */
+    .wrap{
+      padding: 14px;
+      padding-bottom: 140px; /* fallback */
+    }
+
+    /* si el index inyecta la variable en :root de la página padre, esto es solo fallback,
+       pero aquí igual funciona porque el iframe scrollea y necesitamos margen. */
+    @media (max-width: 600px){
+      .wrap{ padding-bottom: 160px; }
+    }
 
     .panel{
       border-radius: 16px;
@@ -71,6 +83,7 @@
 
     .panel-body{ padding: 14px; }
 
+    /* 2 columnas fijas (móvil baja a 1) */
     .words-grid{
       display:grid;
       gap: 12px;
@@ -91,6 +104,8 @@
       user-select: none;
       transition: transform .14s var(--ease), background .14s var(--ease), border-color .14s var(--ease);
       outline:none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
 
     .word-card:hover,
@@ -100,6 +115,7 @@
       border-color: var(--accent);
     }
 
+    /* Mixe + Español + Audio en una línea */
     .row{
       display:flex;
       align-items:center;
@@ -154,6 +170,7 @@
         font-size: 14px;
         padding: 10px 14px;
       }
+      .mixe, .es{ font-size: 20px; }
     }
 
     /* Unlock modal */
@@ -193,8 +210,10 @@
       box-shadow: 0 16px 38px rgba(0,0,0,.40);
     }
 
-    /* ✅ MODO IFRAME: quita doble recuadro */
-    body.in-iframe .wrap{ padding: 0; }
+    /* ==========================================================
+       ✅ MODO IFRAME: quita el “doble recuadro” y evita “vacío”
+       ========================================================== */
+    body.in-iframe .wrap{ padding: 0 0 160px; } /* deja margen abajo para la barra del index */
 
     body.in-iframe .panel{
       border: 0;
@@ -296,7 +315,6 @@
             </div>
           </div>
 
-          <!-- 8 -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_16.wav">
             <div class="row">
               <div class="pair">
@@ -307,7 +325,6 @@
             </div>
           </div>
 
-          <!-- 9 -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_18.wav">
             <div class="row">
               <div class="pair">
@@ -318,7 +335,6 @@
             </div>
           </div>
 
-          <!-- 10 -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_20.wav">
             <div class="row">
               <div class="pair">
@@ -329,7 +345,6 @@
             </div>
           </div>
 
-          <!-- 11 -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_22.wav">
             <div class="row">
               <div class="pair">
@@ -340,7 +355,6 @@
             </div>
           </div>
 
-          <!-- 12 -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_27.wav">
             <div class="row">
               <div class="pair">
@@ -351,7 +365,6 @@
             </div>
           </div>
 
-          <!-- 13 -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_29.wav">
             <div class="row">
               <div class="pair">
@@ -362,7 +375,6 @@
             </div>
           </div>
 
-          <!-- 14 -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_33.wav">
             <div class="row">
               <div class="pair">
@@ -373,7 +385,6 @@
             </div>
           </div>
 
-          <!-- 15 -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_35.wav">
             <div class="row">
               <div class="pair">
@@ -384,7 +395,6 @@
             </div>
           </div>
 
-          <!-- 16 -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_38.wav">
             <div class="row">
               <div class="pair">
@@ -395,7 +405,6 @@
             </div>
           </div>
 
-          <!-- 17 -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_40.wav">
             <div class="row">
               <div class="pair">
@@ -406,7 +415,6 @@
             </div>
           </div>
 
-          <!-- 18 -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_42.wav">
             <div class="row">
               <div class="pair">
@@ -417,7 +425,6 @@
             </div>
           </div>
 
-          <!-- 19 -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_44.wav">
             <div class="row">
               <div class="pair">
@@ -428,7 +435,6 @@
             </div>
           </div>
 
-          <!-- MAYIIPY -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_47.wav">
             <div class="row">
               <div class="pair">
@@ -439,7 +445,6 @@
             </div>
           </div>
 
-          <!-- MAYJAJP -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_49.wav">
             <div class="row">
               <div class="pair">
@@ -450,7 +455,6 @@
             </div>
           </div>
 
-          <!-- MAYJUIK -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_51.wav">
             <div class="row">
               <div class="pair">
@@ -461,7 +465,6 @@
             </div>
           </div>
 
-          <!-- ME’EY -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_53.wav">
             <div class="row">
               <div class="pair">
@@ -472,7 +475,6 @@
             </div>
           </div>
 
-          <!-- ME’PX -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_55.wav">
             <div class="row">
               <div class="pair">
@@ -483,7 +485,6 @@
             </div>
           </div>
 
-          <!-- ME’XPË -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_57.wav">
             <div class="row">
               <div class="pair">
@@ -494,7 +495,6 @@
             </div>
           </div>
 
-          <!-- MEENY -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_59.wav">
             <div class="row">
               <div class="pair">
@@ -505,7 +505,6 @@
             </div>
           </div>
 
-          <!-- MEETSY -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_61.wav">
             <div class="row">
               <div class="pair">
@@ -516,7 +515,6 @@
             </div>
           </div>
 
-          <!-- MEJTSP -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_65.wav">
             <div class="row">
               <div class="pair">
@@ -527,7 +525,6 @@
             </div>
           </div>
 
-          <!-- MEJY -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_67.wav">
             <div class="row">
               <div class="pair">
@@ -538,7 +535,6 @@
             </div>
           </div>
 
-          <!-- MEKX -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_69.wav">
             <div class="row">
               <div class="pair">
@@ -549,7 +545,6 @@
             </div>
           </div>
 
-          <!-- METSPË -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_71.wav">
             <div class="row">
               <div class="pair">
@@ -560,7 +555,6 @@
             </div>
           </div>
 
-          <!-- MI’KA -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_73.wav">
             <div class="row">
               <div class="pair">
@@ -571,7 +565,6 @@
             </div>
           </div>
 
-          <!-- MIITSY -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_75.wav">
             <div class="row">
               <div class="pair">
@@ -582,7 +575,6 @@
             </div>
           </div>
 
-          <!-- MIITSY AJKX -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_77.wav">
             <div class="row">
               <div class="pair">
@@ -593,7 +585,6 @@
             </div>
           </div>
 
-          <!-- MIMP -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_79.wav">
             <div class="row">
               <div class="pair">
@@ -604,7 +595,6 @@
             </div>
           </div>
 
-          <!-- MIN -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_82.wav">
             <div class="row">
               <div class="pair">
@@ -615,7 +605,6 @@
             </div>
           </div>
 
-          <!-- MIXUNK -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_84.wav">
             <div class="row">
               <div class="pair">
@@ -626,7 +615,6 @@
             </div>
           </div>
 
-          <!-- MIXY -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_86.wav">
             <div class="row">
               <div class="pair">
@@ -637,7 +625,6 @@
             </div>
           </div>
 
-          <!-- MË’ËKY -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_88.wav">
             <div class="row">
               <div class="pair">
@@ -648,7 +635,6 @@
             </div>
           </div>
 
-          <!-- MË’ËT -->
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_90.wav">
             <div class="row">
               <div class="pair">
@@ -659,27 +645,16 @@
             </div>
           </div>
 
-          <!-- ... (tu resto queda igual) ... -->
-
-          <!-- MUUXY -->
-          <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_168.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MUUXY</div>
-                <div class="es">Pájaro</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
-          </div>
+          <!-- ✅ Aquí puedes seguir agregando MÁS cards si lo deseas, mismo patrón -->
 
         </div>
       </div>
     </div>
   </div>
 
-  <div class="unlock" id="unlock">
-    <div class="unlock-card">
-      <h2>Activar audio</h2>
+  <div class="unlock" id="unlock" aria-hidden="true">
+    <div class="unlock-card" role="dialog" aria-modal="true" aria-labelledby="unlockTitle">
+      <h2 id="unlockTitle">Activar audio</h2>
       <p>Por seguridad del navegador, el audio requiere 1 toque inicial.<br/>Después podrás reproducir con solo tocar.</p>
       <button class="unlock-btn" id="unlockBtn" type="button">✅ Tocar para activar</button>
     </div>
@@ -691,17 +666,13 @@
       document.body.classList.add("in-iframe");
     }
 
-    // ✅ modo táctil automático
+    // ✅ detectar touch (móvil)
     const isTouch =
-      window.matchMedia?.("(pointer: coarse)").matches ||
+      window.matchMedia?.("(pointer: coarse)")?.matches ||
       "ontouchstart" in window ||
       navigator.maxTouchPoints > 0;
 
-    function haptic(ms = 10){
-      try{
-        if (isTouch && navigator.vibrate) navigator.vibrate(ms);
-      }catch(e){}
-    }
+    if (isTouch) document.body.classList.add("is-touch");
 
     const unlock = document.getElementById("unlock");
     const unlockBtn = document.getElementById("unlockBtn");
@@ -710,15 +681,21 @@
     player.preload = "auto";
     let audioUnlocked = false;
 
-    function showUnlock(){ unlock.classList.add("show"); }
-    function hideUnlock(){ unlock.classList.remove("show"); }
+    function showUnlock(){
+      unlock.classList.add("show");
+      unlock.setAttribute("aria-hidden", "false");
+    }
+    function hideUnlock(){
+      unlock.classList.remove("show");
+      unlock.setAttribute("aria-hidden", "true");
+    }
 
     async function unlockAudio(preloadSrc){
       try{
         if (preloadSrc) player.src = preloadSrc;
         await player.play();
         player.pause();
-        player.currentTime = 0;
+        try{ player.currentTime = 0; }catch(e){}
         audioUnlocked = true;
         hideUnlock();
       }catch(e){
@@ -726,38 +703,48 @@
       }
     }
 
-    function play(src, withHaptic = false){
-      if (!audioUnlocked){
+    function haptic(){
+      if (isTouch && navigator.vibrate) navigator.vibrate(10);
+    }
+
+    function play(src){
+      // ✅ En móvil: si no está desbloqueado, pide unlock
+      if (isTouch && !audioUnlocked){
         showUnlock();
         return;
       }
-      if (withHaptic) haptic(10);
 
       const abs = new URL(src, window.location.href).href;
       if (player.src !== abs) player.src = src;
-      player.currentTime = 0;
-      player.play().catch(()=>{});
+
+      try{ player.currentTime = 0; }catch(e){}
+      player.play().then(() => haptic()).catch(()=>{});
     }
 
-    setTimeout(() => showUnlock(), 550);
+    // ✅ Unlock modal SOLO en touch. Desktop no bloquea.
+    if (isTouch) {
+      setTimeout(() => showUnlock(), 500);
+    } else {
+      audioUnlocked = true;
+    }
 
     unlockBtn.addEventListener("click", async () => {
-      haptic(10);
       await unlockAudio("../Letra-M/M_word_1.wav");
     });
 
     document.querySelectorAll("[data-audio]").forEach(card => {
       const src = card.getAttribute("data-audio");
 
-      // ✅ Desktop: hover/focus puede reproducir
-      if (!isTouch){
-        card.addEventListener("pointerenter", () => play(src, false));
-        card.addEventListener("focus", () => play(src, false));
+      if (isTouch){
+        // ✅ Touch: tap/pointerdown
+        card.addEventListener("pointerdown", () => play(src), { passive: true });
+        card.addEventListener("click", () => play(src));
+      } else {
+        // ✅ Desktop: hover/focus/click
+        card.addEventListener("pointerenter", () => play(src));
+        card.addEventListener("focus", () => play(src));
+        card.addEventListener("click", () => play(src));
       }
-
-      // ✅ Touch: SOLO tap/click (con vibración)
-      card.addEventListener("pointerdown", () => play(src, true));
-      card.addEventListener("click", () => play(src, true));
     });
   </script>
 </body>
