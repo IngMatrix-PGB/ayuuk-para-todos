@@ -101,7 +101,7 @@
       display:flex;
       flex-direction: column;
       gap: 12px;
-      padding-left: 0; /* ✅ sin bolita, sin indent */
+      padding-left: 0;
       margin-top: 2px;
     }
 
@@ -155,11 +155,11 @@
 
     /* ===== Main ===== */
     .main{
-      padding: 14px 18px 132px; /* ✅ menos padding arriba */
+      padding: 14px 18px 132px;
       position: relative;
       display:flex;
       flex-direction: column;
-      gap: 12px;               /* ✅ sube contenido (menos separación) */
+      gap: 12px;
       min-height: 100vh;
     }
 
@@ -167,7 +167,7 @@
       background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
       border: 1px solid rgba(255,255,255,.14);
       border-radius: var(--r);
-      padding: 14px 16px; /* ✅ un poco más compacto */
+      padding: 14px 16px;
       box-shadow: 0 18px 44px rgba(0,0,0,.36);
       backdrop-filter: blur(10px);
       position: relative;
@@ -207,10 +207,10 @@
       box-shadow: 0 18px 44px rgba(0,0,0,.36);
 
       width: 100%;
-      max-width: 980px;   /* ✅ más tight */
+      max-width: 980px;
       margin: 0 auto;
 
-      min-height: 320px;  /* ✅ menos alto = menos vacío */
+      min-height: 320px;
       max-height: 58vh;
 
       background: rgba(255,255,255,.03);
@@ -336,25 +336,23 @@
     }
     .ctrl:hover{ transform: translateY(-1px); background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.22); }
 
-    /* ===== IFRAME (LETRAS) =====
-       ✅ SIN marco extra: ya lo pone .stage (solo 1 contorno)
-    */
+    /* ===== IFRAME (LETRAS) ===== */
     .frame-wrap{
       position:absolute;
-      inset: 0;         /* ✅ ocupa todo el stage */
+      inset: 0;
       z-index: 5;
       display:none;
 
-      border: 0;        /* ✅ quita borde */
+      border: 0;
       background: transparent;
       box-shadow: none;
       overflow: hidden;
 
-      padding: 14px;    /* ✅ respiración interna (sin marco) */
+      padding: 14px;
     }
 
     .letter-frame{
-      position: relative;  /* ✅ para que respete el padding del wrap */
+      position: relative;
       width: 100%;
       height: 100%;
       border: 0;
@@ -461,6 +459,52 @@
       .frame-wrap{ padding: 12px; }
     }
 
+    /* ==========================================================
+       ✅ MOBILE UX PACK (<= 600px)
+       - Alpha en 1 fila con scroll horizontal
+       - Menos alto + letras más compactas
+       - Stage/slider no empuja contenido
+       - Title más suave (sin sombra fuerte)
+       ========================================================== */
+    @media (max-width: 600px){
+      .alpha{
+        padding: 10px 8px 12px;
+      }
+
+      .alpha .title{
+        font-size: 14px;
+        letter-spacing: 1px;
+        text-shadow: none;
+        color: rgba(255, 120, 120, 0.90);
+        margin-bottom: 8px;
+      }
+
+      .letters{
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
+        gap: 10px;
+      }
+
+      /* opcional: scrollbar discreto */
+      .letters::-webkit-scrollbar{ height: 6px; }
+      .letters::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.18); border-radius: 999px; }
+
+      .letter{
+        width: 48px;
+        height: 48px;
+        font-size: 18px;
+        flex: 0 0 auto;
+      }
+
+      .stage{
+        max-height: 45vh;
+        min-height: 260px;
+      }
+    }
+
     /* Toast */
     .toast{
       position: fixed;
@@ -481,6 +525,11 @@
       z-index: 60;
     }
     .toast.show{ display:block; }
+
+    /* ✅ modo touch: evita efectos “hover grandes” en móvil */
+    body.is-touch .letter.hovered{
+      transform: scale(1.08);
+    }
   </style>
 </head>
 
@@ -608,6 +657,22 @@
 
   <script>
     /* =========================
+       ✅ Detectar móvil/touch y activar modo táctil
+    ========================= */
+    const isTouch =
+      window.matchMedia?.("(pointer: coarse)").matches ||
+      "ontouchstart" in window ||
+      navigator.maxTouchPoints > 0;
+
+    if (isTouch) document.body.classList.add("is-touch");
+
+    function haptic(ms = 10){
+      try{
+        if (isTouch && navigator.vibrate) navigator.vibrate(ms);
+      }catch(e){}
+    }
+
+    /* =========================
        Toast
     ========================= */
     const toastEl = document.getElementById("toast");
@@ -625,6 +690,7 @@
       if (t){
         e.preventDefault();
         toast(t.getAttribute("data-toast") || "Próximamente.");
+        haptic(10);
       }
     });
 
@@ -677,15 +743,29 @@
       b.dataset.letter = L;
 
       let shrinkTimer = null;
-      const setHover = () => { if (shrinkTimer) clearTimeout(shrinkTimer); b.classList.add("hovered"); };
-      const clearHoverDelayed = () => { if (shrinkTimer) clearTimeout(shrinkTimer); shrinkTimer = setTimeout(() => b.classList.remove("hovered"), shrinkDelayMs); };
+
+      // ✅ en touch evitamos hover agresivo
+      const setHover = () => {
+        if (isTouch) return;
+        if (shrinkTimer) clearTimeout(shrinkTimer);
+        b.classList.add("hovered");
+      };
+      const clearHoverDelayed = () => {
+        if (isTouch) return;
+        if (shrinkTimer) clearTimeout(shrinkTimer);
+        shrinkTimer = setTimeout(() => b.classList.remove("hovered"), shrinkDelayMs);
+      };
 
       b.addEventListener("mouseenter", setHover);
       b.addEventListener("mouseleave", clearHoverDelayed);
       b.addEventListener("focus", setHover);
       b.addEventListener("blur", clearHoverDelayed);
 
-      b.addEventListener("click", () => showLetter(L));
+      b.addEventListener("click", () => {
+        haptic(10);
+        showLetter(L);
+      });
+
       lettersWrap.appendChild(b);
     });
 
@@ -694,7 +774,10 @@
       const v = e.target.closest("[data-view]");
       if (!v) return;
       const view = v.getAttribute("data-view");
-      if (view === "home") showHome();
+      if (view === "home"){
+        haptic(10);
+        showHome();
+      }
     });
 
     /* =========================
@@ -750,6 +833,7 @@
     function togglePause(){
       isPaused = !isPaused;
       toast(isPaused ? "Pausa: slider detenido" : "Reanudado");
+      haptic(10);
     }
 
     async function initSlider(){
@@ -790,7 +874,11 @@
         dot.className = "dotbtn";
         dot.type = "button";
         dot.setAttribute("aria-label", `Slide ${i+1}`);
-        dot.addEventListener("click", () => { setActive(i); toast("Slide seleccionado"); });
+        dot.addEventListener("click", () => {
+          setActive(i);
+          toast("Slide seleccionado");
+          haptic(10);
+        });
         dotsEl.appendChild(dot);
         dots.push(dot);
       });
@@ -799,13 +887,13 @@
       startAuto();
     }
 
-    prevBtn.addEventListener("click", () => prev());
-    nextBtn.addEventListener("click", () => next());
+    prevBtn.addEventListener("click", () => { prev(); haptic(10); });
+    nextBtn.addEventListener("click", () => { next(); haptic(10); });
     pauseBtn.addEventListener("click", () => togglePause());
 
     const stageEl = document.querySelector(".stage");
-    stageEl.addEventListener("mouseenter", () => { isPaused = true; });
-    stageEl.addEventListener("mouseleave", () => { isPaused = false; });
+    stageEl.addEventListener("mouseenter", () => { if (!isTouch) isPaused = true; });
+    stageEl.addEventListener("mouseleave", () => { if (!isTouch) isPaused = false; });
 
     showHome();
     initSlider();
