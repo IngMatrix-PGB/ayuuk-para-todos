@@ -36,7 +36,6 @@
         radial-gradient(900px 520px at 65% 18%, rgba(37,99,235,.18), transparent 60%),
         radial-gradient(700px 440px at 25% 55%, rgba(245,158,11,.12), transparent 62%),
         linear-gradient(135deg, #061021, var(--bg));
-      /* ✅ clave: no dejes que body haga scroll (pelea con barra fixed) */
       height: 100dvh;
       overflow: hidden;
       overflow-x: hidden;
@@ -60,8 +59,8 @@
     .app{
       display:grid;
       grid-template-columns: 340px 1fr;
-      height: 100dvh;           /* ✅ en vez de min-height:100vh */
-      overflow: hidden;         /* ✅ */
+      height: 100dvh;
+      overflow: hidden;
     }
     @media (max-width: 940px){
       .app{ grid-template-columns: 1fr; }
@@ -73,7 +72,7 @@
       border-right: 2px solid rgba(0,0,0,.45);
       padding: 18px 16px 18px;
       position: relative;
-      overflow: auto;           /* ✅ si el menú crece, scrollea aquí */
+      overflow: auto;
       -webkit-overflow-scrolling: touch;
     }
     .sidebar::after{
@@ -165,18 +164,17 @@
 
     /* ===== Main ===== */
     .main{
-      /* ✅ padding-bottom dinámico según altura real de .alpha */
       padding: 14px 18px calc(var(--alphaH, 120px) + 16px);
       position: relative;
       display:flex;
       flex-direction: column;
       gap: 12px;
 
-      height: 100%;     /* ✅ */
-      min-height: 0;    /* ✅ importantísimo en flex/grid */
-      overflow: auto;   /* ✅ el scroll principal vive aquí */
+      height: 100%;
+      min-height: 0;
+      overflow: auto;
       -webkit-overflow-scrolling: touch;
-      scroll-behavior: smooth; /* ✅ nice en móviles */
+      scroll-behavior: smooth;
     }
 
     .hero{
@@ -216,7 +214,7 @@
     /* ===== STAGE ===== */
     .stage{
       flex: 1 1 auto;
-      min-height: 0;        /* ✅ clave */
+      min-height: 0;
       border-radius: var(--r);
       overflow: hidden;
       position: relative;
@@ -227,7 +225,6 @@
       max-width: 980px;
       margin: 0 auto;
 
-      /* ❌ QUITAMOS max-height/min-height por vh que generaba huecos */
       background: rgba(255,255,255,.03);
     }
 
@@ -477,8 +474,6 @@
        ✅ Mobile tighten (<=600px)
     ========================= */
     @media (max-width: 600px){
-
-      /* Sidebar más compacta */
       .sidebar{
         padding: 10px 10px 10px;
       }
@@ -487,9 +482,7 @@
         margin: 4px 0 10px;
         letter-spacing: .6px;
       }
-      .menu, .submenu{
-        gap: 9px;
-      }
+      .menu, .submenu{ gap: 9px; }
       .sub-btn{
         padding: 11px 12px;
         font-size: 15px;
@@ -501,12 +494,10 @@
         font-size: 14px;
       }
 
-      /* ✅ MAIN más compacto */
       .main{
         padding: 10px 12px calc(var(--alphaH, 120px) + 12px);
       }
 
-      /* Alpha bar: 1 fila con scroll horizontal y menos alto */
       .alpha{
         padding: 10px 10px 12px;
       }
@@ -538,7 +529,6 @@
         scroll-snap-align: start;
       }
 
-      /* ✅ reduce paddings dentro del iframe container */
       .frame-wrap{ padding: 10px; }
     }
 
@@ -589,58 +579,37 @@
           </a>
 
           <button class="sub-btn" type="button" data-toast="Próximamente: Colores.">
-            <span class="sub-left">
-              <span class="sub-ico" aria-hidden="true">🎨</span>
-              Colores
-            </span>
+            <span class="sub-left"><span class="sub-ico" aria-hidden="true">🎨</span>Colores</span>
             <span aria-hidden="true">›</span>
           </button>
 
           <button class="sub-btn" type="button" data-toast="Próximamente: Animales.">
-            <span class="sub-left">
-              <span class="sub-ico" aria-hidden="true">🐾</span>
-              Animales
-            </span>
+            <span class="sub-left"><span class="sub-ico" aria-hidden="true">🐾</span>Animales</span>
             <span aria-hidden="true">›</span>
           </button>
 
           <button class="sub-btn" type="button" data-toast="Próximamente: Insectos.">
-            <span class="sub-left">
-              <span class="sub-ico" aria-hidden="true">🪲</span>
-              Insectos
-            </span>
+            <span class="sub-left"><span class="sub-ico" aria-hidden="true">🪲</span>Insectos</span>
             <span aria-hidden="true">›</span>
           </button>
 
           <button class="sub-btn" type="button" data-toast="Próximamente: Figuras geométricas.">
-            <span class="sub-left">
-              <span class="sub-ico" aria-hidden="true">🔺</span>
-              Figuras geométricas
-            </span>
+            <span class="sub-left"><span class="sub-ico" aria-hidden="true">🔺</span>Figuras geométricas</span>
             <span aria-hidden="true">›</span>
           </button>
 
           <button class="sub-btn" type="button" data-toast="Próximamente: Fenómenos naturales.">
-            <span class="sub-left">
-              <span class="sub-ico" aria-hidden="true">🌩️</span>
-              Fenómenos naturales
-            </span>
+            <span class="sub-left"><span class="sub-ico" aria-hidden="true">🌩️</span>Fenómenos naturales</span>
             <span aria-hidden="true">›</span>
           </button>
 
           <button class="sub-btn" type="button" data-toast="Próximamente: Naturaleza.">
-            <span class="sub-left">
-              <span class="sub-ico" aria-hidden="true">🌿</span>
-              Naturaleza
-            </span>
+            <span class="sub-left"><span class="sub-ico" aria-hidden="true">🌿</span>Naturaleza</span>
             <span aria-hidden="true">›</span>
           </button>
 
           <button class="sub-btn" type="button" data-toast="Próximamente: Familia y parentesco.">
-            <span class="sub-left">
-              <span class="sub-ico" aria-hidden="true">👨‍👩‍👧</span>
-              Familia y parentesco
-            </span>
+            <span class="sub-left"><span class="sub-ico" aria-hidden="true">👨‍👩‍👧</span>Familia y parentesco</span>
             <span aria-hidden="true">›</span>
           </button>
         </div>
@@ -671,10 +640,7 @@
 
         <!-- LETRAS (iframe) -->
         <div class="frame-wrap" id="frameWrap" aria-label="Diccionario por letra">
-          <iframe class="letter-frame"
-                  id="letterFrame"
-                  title="Letra"
-                  src="about:blank"></iframe>
+          <iframe class="letter-frame" id="letterFrame" title="Letra" src="about:blank"></iframe>
         </div>
       </section>
     </main>
@@ -710,7 +676,7 @@
     });
 
     /* =========================
-       ✅ Touch mode + alpha height (quita huecos)
+       ✅ Touch mode + alpha height
     ========================= */
     const isTouch =
       window.matchMedia?.("(pointer: coarse)")?.matches ||
@@ -731,38 +697,38 @@
     window.addEventListener("orientationchange", updateAlphaHeight);
 
     /* =========================
-       ✅ Auto-scroll helpers (ARREGLO REAL)
-       - al tocar letra -> scroll al stage
-       - al tocar Inicio -> scroll al hero
+       ✅ Auto-scroll (ARREGLO REAL para móvil)
+       - NO usamos scrollIntoView (en móviles con overflow:auto suele fallar)
+       - calculamos el top relativo al contenedor scrolleable (.main)
     ========================= */
     const mainScroll = document.getElementById("mainScroll");
-    const heroEl = document.getElementById("hero");
+    const heroEl  = document.getElementById("hero");
     const stageEl = document.getElementById("stage");
 
-    function safeScrollTo(targetEl){
-      if (!targetEl || !mainScroll) return;
-      // Usamos scrollIntoView dentro del contenedor scrolleable (.main)
-      try{
-        targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
-      }catch(e){
-        // fallback
-        mainScroll.scrollTop = 0;
-      }
+    function scrollMainToElement(el){
+      if (!mainScroll || !el) return;
+
+      // top relativo al contenedor
+      const mainRect = mainScroll.getBoundingClientRect();
+      const elRect   = el.getBoundingClientRect();
+      const top = (elRect.top - mainRect.top) + mainScroll.scrollTop;
+
+      mainScroll.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
     }
 
-    function scrollToHero(){
-      safeScrollTo(heroEl);
-    }
+    function scrollToHero(){ scrollMainToElement(heroEl); }
+    function scrollToStage(){ scrollMainToElement(stageEl); }
 
-    function scrollToStage(){
-      safeScrollTo(stageEl);
+    /* helper: espera a que el layout se asiente (clave cuando cambias display) */
+    function afterLayout(fn){
+      requestAnimationFrame(() => requestAnimationFrame(fn));
     }
 
     /* =========================
        HOME <-> LETRAS (UI)
     ========================= */
-    const homeSlider = document.getElementById("homeSlider");
-    const frameWrap  = document.getElementById("frameWrap");
+    const homeSlider  = document.getElementById("homeSlider");
+    const frameWrap   = document.getElementById("frameWrap");
     const letterFrame = document.getElementById("letterFrame");
 
     const AVAILABLE = new Set(["M"]); // por ahora
@@ -777,8 +743,11 @@
       frameWrap.style.display = "none";
       homeSlider.style.display = "block";
       setActiveLetter(null);
-      requestAnimationFrame(updateAlphaHeight);
-      if (scroll) setTimeout(scrollToHero, 0);
+
+      afterLayout(() => {
+        updateAlphaHeight();
+        if (scroll) scrollToHero();
+      });
     }
 
     function showLetter(letter){
@@ -792,10 +761,12 @@
       letterFrame.src = `letras-spa-lite/${letter}.html`;
 
       setActiveLetter(letter);
-      requestAnimationFrame(updateAlphaHeight);
 
-      // ✅ ARREGLO: al tocar una letra, súbelo al stage para que se vea el contenido
-      setTimeout(scrollToStage, 0);
+      // ✅ ARREGLO: en móvil esto sí sube al stage dentro del scroll contenedor
+      afterLayout(() => {
+        updateAlphaHeight();
+        scrollToStage();
+      });
     }
 
     /* =========================
@@ -842,12 +813,12 @@
       { src: "TeamAda.jpeg",     caption: "Comunidad y aprendizaje: juntos se hace grande" }
     ];
 
-    const slidesEl = document.getElementById("slides");
+    const slidesEl  = document.getElementById("slides");
     const captionEl = document.getElementById("caption");
-    const dotsEl = document.getElementById("dots");
+    const dotsEl    = document.getElementById("dots");
 
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
+    const prevBtn  = document.getElementById("prevBtn");
+    const nextBtn  = document.getElementById("nextBtn");
     const pauseBtn = document.getElementById("pauseBtn");
 
     let imgs = [];
@@ -939,7 +910,6 @@
     nextBtn.addEventListener("click", () => next());
     pauseBtn.addEventListener("click", () => togglePause());
 
-    // ✅ en touch, estos eventos no estorban; en desktop pausan cuando hover
     stageEl.addEventListener("mouseenter", () => { isPaused = true; });
     stageEl.addEventListener("mouseleave", () => { isPaused = false; });
 
