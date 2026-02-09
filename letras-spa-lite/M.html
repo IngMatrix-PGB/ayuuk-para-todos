@@ -17,7 +17,6 @@
       --border: rgba(255,255,255,.14);
       --muted: rgba(242,246,255,.88);
 
-      /* hint rojo */
       --hintRed: rgba(248,113,113,.98);
       --hintRedGlow: rgba(248,113,113,.22);
     }
@@ -33,14 +32,11 @@
       overflow: auto;
     }
 
-    /* ✅ Evita que la barra inferior del index tape las últimas tarjetas */
     .wrap{
       padding: 14px;
-      padding-bottom: 140px; /* fallback */
+      padding-bottom: 140px;
     }
 
-    /* si el index inyecta la variable en :root de la página padre, esto es solo fallback,
-       pero aquí igual funciona porque el iframe scrollea y necesitamos margen. */
     @media (max-width: 600px){
       .wrap{ padding-bottom: 160px; }
     }
@@ -83,7 +79,6 @@
 
     .panel-body{ padding: 14px; }
 
-    /* 2 columnas fijas (móvil baja a 1) */
     .words-grid{
       display:grid;
       gap: 12px;
@@ -115,7 +110,6 @@
       border-color: var(--accent);
     }
 
-    /* Mixe + Español + Audio en una línea */
     .row{
       display:flex;
       align-items:center;
@@ -163,7 +157,6 @@
       white-space: nowrap;
     }
 
-    /* ✅ Tap-friendly en móvil */
     @media (max-width: 600px){
       .word-card{ padding: 16px; }
       .audio-btn{
@@ -173,7 +166,6 @@
       .mixe, .es{ font-size: 20px; }
     }
 
-    /* Unlock modal */
     .unlock{
       position: fixed;
       inset: 0;
@@ -210,10 +202,8 @@
       box-shadow: 0 16px 38px rgba(0,0,0,.40);
     }
 
-    /* ==========================================================
-       ✅ MODO IFRAME: quita el “doble recuadro” y evita “vacío”
-       ========================================================== */
-    body.in-iframe .wrap{ padding: 0 0 160px; } /* deja margen abajo para la barra del index */
+    /* ✅ MODO IFRAME */
+    body.in-iframe .wrap{ padding: 0 0 160px; }
 
     body.in-iframe .panel{
       border: 0;
@@ -246,406 +236,164 @@
         <div class="words-grid">
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_1.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MAA</div>
-                <div class="es">Dónde</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MAA</div><div class="es">Dónde</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_3.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MAAKY</div>
-                <div class="es">Maíz o café lavado</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MAAKY</div><div class="es">Maíz o café lavado</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_5.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MAAP</div>
-                <div class="es">Duerme; durmiendo</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MAAP</div><div class="es">Duerme; durmiendo</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_8.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MAAT</div>
-                <div class="es">Descompuesto</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MAAT</div><div class="es">Descompuesto</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_10.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MAAW</div>
-                <div class="es">Duérmete</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MAAW</div><div class="es">Duérmete</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_12.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MAAX</div>
-                <div class="es">Manso</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MAAX</div><div class="es">Manso</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_13.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MAAXK</div>
-                <div class="es">Período (días atrás)</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MAAXK</div><div class="es">Período (días atrás)</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_16.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MAJ</div>
-                <div class="es">Sazón</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MAJ</div><div class="es">Sazón</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_18.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MAJAA</div>
-                <div class="es">Fuerza</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MAJAA</div><div class="es">Fuerza</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_20.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MAJK</div>
-                <div class="es">Diez</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MAJK</div><div class="es">Diez</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_22.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MAJT</div>
-                <div class="es">Cántaro</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MAJT</div><div class="es">Cántaro</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_27.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MAPXY</div>
-                <div class="es">Grueso</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MAPXY</div><div class="es">Grueso</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_29.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MATS</div>
-                <div class="es">Agárralo</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MATS</div><div class="es">Agárralo</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_33.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MAXTEIKY</div>
-                <div class="es">Anteayer</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MAXTEIKY</div><div class="es">Anteayer</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_35.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MAXUUNK</div>
-                <div class="es">Bebé, criatura</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MAXUUNK</div><div class="es">Bebé, criatura</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_38.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MAXYWIITS</div>
-                <div class="es">Águila</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MAXYWIITS</div><div class="es">Águila</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_40.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MAY</div>
-                <div class="es">Bastante</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MAY</div><div class="es">Bastante</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_42.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MAYAJT</div>
-                <div class="es">Favor</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MAYAJT</div><div class="es">Favor</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_44.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MAYË</div>
-                <div class="es">Adinerado o Pudiente</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MAYË</div><div class="es">Adinerado o Pudiente</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_47.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MAYIIPY</div>
-                <div class="es">Se reproduce</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MAYIIPY</div><div class="es">Se reproduce</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_49.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MAYJAJP</div>
-                <div class="es">Hace falta</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MAYJAJP</div><div class="es">Hace falta</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_51.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MAYJUIK</div>
-                <div class="es">Despierta</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MAYJUIK</div><div class="es">Despierta</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_53.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">ME’EY</div>
-                <div class="es">Molido</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">ME’EY</div><div class="es">Molido</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_55.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">ME’PX</div>
-                <div class="es">Tijera</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">ME’PX</div><div class="es">Tijera</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_57.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">ME’XPË</div>
-                <div class="es">Peluquero</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">ME’XPË</div><div class="es">Peluquero</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_59.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MEENY</div>
-                <div class="es">Dinero</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MEENY</div><div class="es">Dinero</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_61.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MEETSY</div>
-                <div class="es">Robado</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MEETSY</div><div class="es">Robado</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_65.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MEJTSP</div>
-                <div class="es">Se viene</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MEJTSP</div><div class="es">Se viene</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_67.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MEJY</div>
-                <div class="es">Mar</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MEJY</div><div class="es">Mar</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_69.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MEKX</div>
-                <div class="es">Perdón</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MEKX</div><div class="es">Perdón</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_71.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">METSPË</div>
-                <div class="es">Ladrón</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">METSPË</div><div class="es">Ladrón</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_73.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MI’KA</div>
-                <div class="es">Chango</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MI’KA</div><div class="es">Chango</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_75.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MIITSY</div>
-                <div class="es">Tú</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MIITSY</div><div class="es">Tú</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_77.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MIITSY AJKX</div>
-                <div class="es">Ustedes</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MIITSY AJKX</div><div class="es">Ustedes</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_79.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MIMP</div>
-                <div class="es">Viene</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MIMP</div><div class="es">Viene</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_82.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MIN</div>
-                <div class="es">Ven</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MIN</div><div class="es">Ven</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_84.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MIXUNK</div>
-                <div class="es">Chamaco</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MIXUNK</div><div class="es">Chamaco</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_86.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MIXY</div>
-                <div class="es">Varón</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MIXY</div><div class="es">Varón</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_88.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MË’ËKY</div>
-                <div class="es">Tamal</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MË’ËKY</div><div class="es">Tamal</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
 
           <div class="word-card" tabindex="0" data-audio="../Letra-M/M_word_90.wav">
-            <div class="row">
-              <div class="pair">
-                <div class="mixe">MË’ËT</div>
-                <div class="es">Yerno</div>
-              </div>
-              <div class="audio-btn">🔊 Audio</div>
-            </div>
+            <div class="row"><div class="pair"><div class="mixe">MË’ËT</div><div class="es">Yerno</div></div><div class="audio-btn">🔊 Audio</div></div>
           </div>
-
-          <!-- ✅ Aquí puedes seguir agregando MÁS cards si lo deseas, mismo patrón -->
 
         </div>
       </div>
@@ -661,12 +409,10 @@
   </div>
 
   <script>
-    // ✅ detecta si está en iframe
     if (window.self !== window.top) {
       document.body.classList.add("in-iframe");
     }
 
-    // ✅ detectar touch (móvil)
     const isTouch =
       window.matchMedia?.("(pointer: coarse)")?.matches ||
       "ontouchstart" in window ||
@@ -708,7 +454,6 @@
     }
 
     function play(src){
-      // ✅ En móvil: si no está desbloqueado, pide unlock
       if (isTouch && !audioUnlocked){
         showUnlock();
         return;
@@ -721,7 +466,6 @@
       player.play().then(() => haptic()).catch(()=>{});
     }
 
-    // ✅ Unlock modal SOLO en touch. Desktop no bloquea.
     if (isTouch) {
       setTimeout(() => showUnlock(), 500);
     } else {
@@ -736,11 +480,9 @@
       const src = card.getAttribute("data-audio");
 
       if (isTouch){
-        // ✅ Touch: tap/pointerdown
         card.addEventListener("pointerdown", () => play(src), { passive: true });
         card.addEventListener("click", () => play(src));
       } else {
-        // ✅ Desktop: hover/focus/click
         card.addEventListener("pointerenter", () => play(src));
         card.addEventListener("focus", () => play(src));
         card.addEventListener("click", () => play(src));
