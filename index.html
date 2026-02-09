@@ -26,6 +26,8 @@
     }
 
     *{ box-sizing: border-box; }
+    html, body{ height: 100%; }
+
     body{
       margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -34,8 +36,10 @@
         radial-gradient(900px 520px at 65% 18%, rgba(37,99,235,.18), transparent 60%),
         radial-gradient(700px 440px at 25% 55%, rgba(245,158,11,.12), transparent 62%),
         linear-gradient(135deg, #061021, var(--bg));
-      min-height: 100vh;
-      overflow-x:hidden;
+      /* ✅ clave: no dejes que body haga scroll (pelea con barra fixed) */
+      height: 100dvh;
+      overflow: hidden;
+      overflow-x: hidden;
     }
 
     body::before{
@@ -56,7 +60,8 @@
     .app{
       display:grid;
       grid-template-columns: 340px 1fr;
-      min-height: 100vh;
+      height: 100dvh;           /* ✅ en vez de min-height:100vh */
+      overflow: hidden;         /* ✅ */
     }
     @media (max-width: 940px){
       .app{ grid-template-columns: 1fr; }
@@ -68,6 +73,8 @@
       border-right: 2px solid rgba(0,0,0,.45);
       padding: 18px 16px 18px;
       position: relative;
+      overflow: auto;           /* ✅ si el menú crece, scrollea aquí */
+      -webkit-overflow-scrolling: touch;
     }
     .sidebar::after{
       content:"";
@@ -159,12 +166,16 @@
     /* ===== Main ===== */
     .main{
       /* ✅ padding-bottom dinámico según altura real de .alpha */
-      padding: 14px 18px calc(var(--alphaH, 120px) + 24px);
+      padding: 14px 18px calc(var(--alphaH, 120px) + 16px);
       position: relative;
       display:flex;
       flex-direction: column;
       gap: 12px;
-      min-height: 100vh;
+
+      height: 100%;     /* ✅ */
+      min-height: 0;    /* ✅ importantísimo en flex/grid */
+      overflow: auto;   /* ✅ el scroll principal vive aquí */
+      -webkit-overflow-scrolling: touch;
     }
 
     .hero{
@@ -204,6 +215,7 @@
     /* ===== STAGE ===== */
     .stage{
       flex: 1 1 auto;
+      min-height: 0;        /* ✅ clave */
       border-radius: var(--r);
       overflow: hidden;
       position: relative;
@@ -214,9 +226,7 @@
       max-width: 980px;
       margin: 0 auto;
 
-      min-height: 320px;
-      max-height: 58vh;
-
+      /* ❌ QUITAMOS max-height/min-height por vh que generaba huecos */
       background: rgba(255,255,255,.03);
     }
 
@@ -459,7 +469,6 @@
       .letter{ width: 54px; height: 54px; font-size: 20px; }
       .letters{ gap: 12px; }
       .alpha .title{ font-size: 16px; }
-      .stage{ max-height: 56vh; min-height: 300px; }
       .frame-wrap{ padding: 12px; }
     }
 
@@ -470,18 +479,18 @@
 
       /* Sidebar más compacta */
       .sidebar{
-        padding: 12px 12px 12px;
+        padding: 10px 10px 10px;
       }
       .side-title{
-        font-size: 18px;
+        font-size: 17px;
         margin: 4px 0 10px;
         letter-spacing: .6px;
       }
       .menu, .submenu{
-        gap: 10px;
+        gap: 9px;
       }
       .sub-btn{
-        padding: 12px 12px;
+        padding: 11px 12px;
         font-size: 15px;
         border-radius: 14px;
       }
@@ -491,10 +500,9 @@
         font-size: 14px;
       }
 
-      /* Stage: que no empuje todo hacia abajo */
-      .stage{
-        max-height: 45vh;
-        min-height: 240px;
+      /* ✅ MAIN más compacto */
+      .main{
+        padding: 10px 12px calc(var(--alphaH, 120px) + 12px);
       }
 
       /* Alpha bar: 1 fila con scroll horizontal y menos alto */
@@ -528,6 +536,9 @@
         flex: 0 0 auto;
         scroll-snap-align: start;
       }
+
+      /* ✅ reduce paddings dentro del iframe container */
+      .frame-wrap{ padding: 10px; }
     }
 
     /* Toast */
