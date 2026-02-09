@@ -176,6 +176,7 @@
       min-height: 0;    /* ✅ importantísimo en flex/grid */
       overflow: auto;   /* ✅ el scroll principal vive aquí */
       -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth; /* ✅ nice en móviles */
     }
 
     .hero{
@@ -646,12 +647,12 @@
       </nav>
     </aside>
 
-    <main class="main">
-      <section class="hero">
+    <main class="main" id="mainScroll">
+      <section class="hero" id="hero">
         <h1>Ayuuk para Todos</h1>
       </section>
 
-      <section class="stage" aria-label="Contenido principal">
+      <section class="stage" id="stage" aria-label="Contenido principal">
         <!-- HOME (Slider) -->
         <div class="home-slider" id="homeSlider" aria-label="Galería principal">
           <div class="stage-controls" aria-label="Controles">
@@ -730,6 +731,34 @@
     window.addEventListener("orientationchange", updateAlphaHeight);
 
     /* =========================
+       ✅ Auto-scroll helpers (ARREGLO REAL)
+       - al tocar letra -> scroll al stage
+       - al tocar Inicio -> scroll al hero
+    ========================= */
+    const mainScroll = document.getElementById("mainScroll");
+    const heroEl = document.getElementById("hero");
+    const stageEl = document.getElementById("stage");
+
+    function safeScrollTo(targetEl){
+      if (!targetEl || !mainScroll) return;
+      // Usamos scrollIntoView dentro del contenedor scrolleable (.main)
+      try{
+        targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      }catch(e){
+        // fallback
+        mainScroll.scrollTop = 0;
+      }
+    }
+
+    function scrollToHero(){
+      safeScrollTo(heroEl);
+    }
+
+    function scrollToStage(){
+      safeScrollTo(stageEl);
+    }
+
+    /* =========================
        HOME <-> LETRAS (UI)
     ========================= */
     const homeSlider = document.getElementById("homeSlider");
@@ -744,11 +773,12 @@
       });
     }
 
-    function showHome(){
+    function showHome({ scroll = true } = {}){
       frameWrap.style.display = "none";
       homeSlider.style.display = "block";
       setActiveLetter(null);
       requestAnimationFrame(updateAlphaHeight);
+      if (scroll) setTimeout(scrollToHero, 0);
     }
 
     function showLetter(letter){
@@ -763,6 +793,9 @@
 
       setActiveLetter(letter);
       requestAnimationFrame(updateAlphaHeight);
+
+      // ✅ ARREGLO: al tocar una letra, súbelo al stage para que se vea el contenido
+      setTimeout(scrollToStage, 0);
     }
 
     /* =========================
@@ -797,7 +830,7 @@
       const v = e.target.closest("[data-view]");
       if (!v) return;
       const view = v.getAttribute("data-view");
-      if (view === "home") showHome();
+      if (view === "home") showHome({ scroll: true });
     });
 
     /* =========================
@@ -906,11 +939,12 @@
     nextBtn.addEventListener("click", () => next());
     pauseBtn.addEventListener("click", () => togglePause());
 
-    const stageEl = document.querySelector(".stage");
+    // ✅ en touch, estos eventos no estorban; en desktop pausan cuando hover
     stageEl.addEventListener("mouseenter", () => { isPaused = true; });
     stageEl.addEventListener("mouseleave", () => { isPaused = false; });
 
-    showHome();
+    // Inicio
+    showHome({ scroll: false });
     initSlider();
   </script>
 </body>
