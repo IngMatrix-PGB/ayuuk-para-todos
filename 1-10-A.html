@@ -20,7 +20,6 @@
       --hintRed: rgba(248,113,113,.98);
       --hintRedGlow: rgba(248,113,113,.22);
 
-      /* ✅ único cambio visual respecto a M: números en rojo */
       --numRed: rgba(255,82,82,1);
       --numShadow: rgba(0,0,0,.55);
     }
@@ -301,10 +300,9 @@
     const unlock = document.getElementById("unlock");
     const unlockBtn = document.getElementById("unlockBtn");
 
-    // Reproductor HTML5 (para cuando ya tengas audios reales)
     const player = new Audio();
     player.preload = "auto";
-    player.playsInline = true; // iOS friendly
+    player.playsInline = true;
 
     let audioUnlocked = false;
 
@@ -321,7 +319,7 @@
       if (isTouch && navigator.vibrate) navigator.vibrate(10);
     }
 
-    // ✅ WebAudio: sirve para "desbloquear" audio en móvil sin necesitar src real
+    // WebAudio para desbloquear en móvil
     let audioCtx;
     function ensureAudioContext(){
       const Ctx = window.AudioContext || window.webkitAudioContext;
@@ -334,9 +332,7 @@
       const ctx = ensureAudioContext();
       if (!ctx) return;
 
-      // Si está suspendido (típico móvil), intenta resumir
       if (ctx.state === "suspended") {
-        // resume() debe ser dentro del gesto del usuario
         ctx.resume().catch(()=>{});
       }
 
@@ -356,17 +352,12 @@
       o.stop(now + ms/1000);
     }
 
-    // ✅ Esto es lo que antes fallaba:
-    // ahora desbloquea audio SIEMPRE aunque no exista src real
     async function unlockAudio(){
-      // 1) desbloquear WebAudio
       const ctx = ensureAudioContext();
       if (ctx && ctx.state === "suspended") {
         try { await ctx.resume(); } catch(e) {}
       }
-
-      // 2) “ping” corto para asegurar que el gesto se registró como audio
-      // (en algunos devices esto hace la diferencia)
+      // ping corto para registrar gesto
       try { beep(520, 90); } catch(e) {}
 
       audioUnlocked = true;
@@ -376,13 +367,6 @@
     function play(src, fallbackFreq){
       if (isTouch && !audioUnlocked){
         showUnlock();
-        return;
-      }
-
-      // Si no hay audio real todavía, usamos beep
-      if (!src){
-        beep(fallbackFreq, 170);
-        haptic();
         return;
       }
 
@@ -399,34 +383,30 @@
         });
     }
 
-    // Mostrar modal en touch; en desktop lo dejamos “unlocked”
     if (isTouch) {
       setTimeout(() => showUnlock(), 450);
     } else {
       audioUnlocked = true;
     }
 
-    // ✅ Botón que sí desbloquea (ya no depende de player.src)
     unlockBtn.addEventListener("click", async (e) => {
       e.preventDefault();
       e.stopPropagation();
       await unlockAudio();
     });
 
-    // 🔧 Si luego pones audios reales, llena "audio" con la ruta correcta.
-    // Ejemplo sugerido:
-    // Numeros/N_1.wav ... Numeros/N_10.wav
+    // ✅ Ya con audios reales en /ayuuk-para-todos/Numeros/
     const data = [
-      { n:1,  mixe:"Tu'ug",    es:"Uno",    audio: null },
-      { n:2,  mixe:"Metsk",    es:"Dos",    audio: null },
-      { n:3,  mixe:"Tëgëëg",   es:"Tres",   audio: null },
-      { n:4,  mixe:"Madaaxk",  es:"Cuatro", audio: null },
-      { n:5,  mixe:"Mogooxk",  es:"Cinco",  audio: null },
-      { n:6,  mixe:"Tëdujk",   es:"Seis",   audio: null },
-      { n:7,  mixe:"Juxtujk",  es:"Siete",  audio: null },
-      { n:8,  mixe:"Tuktujk",  es:"Ocho",   audio: null },
-      { n:9,  mixe:"Taaxtujk", es:"Nueve",  audio: null },
-      { n:10, mixe:"Majk",     es:"Diez",   audio: null },
+      { n:1,  mixe:"Tu'ug",    es:"Uno",    audio: "Numeros/1.mp3"  },
+      { n:2,  mixe:"Metsk",    es:"Dos",    audio: "Numeros/2.mp3"  },
+      { n:3,  mixe:"Tëgëëg",   es:"Tres",   audio: "Numeros/3.mp3"  },
+      { n:4,  mixe:"Madaaxk",  es:"Cuatro", audio: "Numeros/4.mp3"  },
+      { n:5,  mixe:"Mogooxk",  es:"Cinco",  audio: "Numeros/5.mp3"  },
+      { n:6,  mixe:"Tëdujk",   es:"Seis",   audio: "Numeros/6.mp3"  },
+      { n:7,  mixe:"Juxtujk",  es:"Siete",  audio: "Numeros/7.mp3"  },
+      { n:8,  mixe:"Tuktujk",  es:"Ocho",   audio: "Numeros/8.mp3"  },
+      { n:9,  mixe:"Taaxtujk", es:"Nueve",  audio: "Numeros/9.mp3"  },
+      { n:10, mixe:"Majk",     es:"Diez",   audio: "Numeros/10.mp3" },
     ];
 
     const grid = document.getElementById("grid");
@@ -435,7 +415,6 @@
       const card = document.createElement("div");
       card.className = "num-card";
       card.tabIndex = 0;
-      if (item.audio) card.dataset.audio = item.audio;
 
       card.innerHTML = `
         <div class="row">
@@ -450,13 +429,11 @@
         </div>
       `;
 
-      const src = item.audio ? item.audio : null;
+      const src = item.audio;
       const freq = 520 + item.n * 28;
 
       if (isTouch){
-        // pointerdown es más rápido en móvil
         card.addEventListener("pointerdown", () => play(src, freq), { passive: true });
-        // click como fallback
         card.addEventListener("click", () => play(src, freq));
       } else {
         card.addEventListener("pointerenter", () => play(src, freq));
