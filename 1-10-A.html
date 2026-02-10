@@ -103,7 +103,6 @@
       .nums-grid{ grid-template-columns: 1fr; }
     }
 
-    /* ✅ MISMO “card feel” que M.html */
     .num-card{
       border-radius: 16px;
       border: 1px solid var(--border);
@@ -302,8 +301,11 @@
     const unlock = document.getElementById("unlock");
     const unlockBtn = document.getElementById("unlockBtn");
 
+    // Reproductor HTML5 (para cuando ya tengas audios reales)
     const player = new Audio();
     player.preload = "auto";
+    player.playsInline = true; // iOS friendly
+
     let audioUnlocked = false;
 
     function showUnlock(){
@@ -315,35 +317,37 @@
       unlock.setAttribute("aria-hidden", "true");
     }
 
-    async function unlockAudio(preloadSrc){
-      try{
-        if (preloadSrc) player.src = preloadSrc;
-        await player.play();
-        player.pause();
-        try{ player.currentTime = 0; }catch(e){}
-        audioUnlocked = true;
-        hideUnlock();
-      }catch(e){
-        showUnlock();
-      }
-    }
-
     function haptic(){
       if (isTouch && navigator.vibrate) navigator.vibrate(10);
     }
 
-    // ✅ fallback “beep” si aún no tienes audios reales de números
+    // ✅ WebAudio: sirve para "desbloquear" audio en móvil sin necesitar src real
     let audioCtx;
+    function ensureAudioContext(){
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return null;
+      audioCtx = audioCtx || new Ctx();
+      return audioCtx;
+    }
+
     function beep(freq=660, ms=140){
-      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-      const o = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
+      const ctx = ensureAudioContext();
+      if (!ctx) return;
+
+      // Si está suspendido (típico móvil), intenta resumir
+      if (ctx.state === "suspended") {
+        // resume() debe ser dentro del gesto del usuario
+        ctx.resume().catch(()=>{});
+      }
+
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
       o.type = "sine";
       o.frequency.value = freq;
       o.connect(g);
-      g.connect(audioCtx.destination);
+      g.connect(ctx.destination);
 
-      const now = audioCtx.currentTime;
+      const now = ctx.currentTime;
       g.gain.setValueAtTime(0.0001, now);
       g.gain.exponentialRampToValueAtTime(0.15, now + 0.01);
       g.gain.exponentialRampToValueAtTime(0.0001, now + ms/1000);
@@ -352,12 +356,30 @@
       o.stop(now + ms/1000);
     }
 
+    // ✅ Esto es lo que antes fallaba:
+    // ahora desbloquea audio SIEMPRE aunque no exista src real
+    async function unlockAudio(){
+      // 1) desbloquear WebAudio
+      const ctx = ensureAudioContext();
+      if (ctx && ctx.state === "suspended") {
+        try { await ctx.resume(); } catch(e) {}
+      }
+
+      // 2) “ping” corto para asegurar que el gesto se registró como audio
+      // (en algunos devices esto hace la diferencia)
+      try { beep(520, 90); } catch(e) {}
+
+      audioUnlocked = true;
+      hideUnlock();
+    }
+
     function play(src, fallbackFreq){
       if (isTouch && !audioUnlocked){
         showUnlock();
         return;
       }
 
+      // Si no hay audio real todavía, usamos beep
       if (!src){
         beep(fallbackFreq, 170);
         haptic();
@@ -368,17 +390,28 @@
       if (player.src !== abs) player.src = src;
 
       try{ player.currentTime = 0; }catch(e){}
-      player.play().then(() => haptic()).catch(() => {
-        beep(fallbackFreq, 170);
-        haptic();
-      });
+      player.play()
+        .then(() => haptic())
+        .catch(() => {
+          // fallback por si el mp3 falla
+          beep(fallbackFreq, 170);
+          haptic();
+        });
     }
 
+    // Mostrar modal en touch; en desktop lo dejamos “unlocked”
     if (isTouch) {
-      setTimeout(() => showUnlock(), 500);
+      setTimeout(() => showUnlock(), 450);
     } else {
       audioUnlocked = true;
     }
+
+    // ✅ Botón que sí desbloquea (ya no depende de player.src)
+    unlockBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      await unlockAudio();
+    });
 
     // 🔧 Si luego pones audios reales, llena "audio" con la ruta correcta.
     // Ejemplo sugerido:
@@ -395,12 +428,6 @@
       { n:9,  mixe:"Taaxtujk", es:"Nueve",  audio: null },
       { n:10, mixe:"Majk",     es:"Diez",   audio: null },
     ];
-
-    unlockBtn.addEventListener("click", async () => {
-      // Si luego agregas audio real, puedes pre-cargar con algo como:
-      // await unlockAudio("Numeros/N_1.wav");
-      await unlockAudio();
-    });
 
     const grid = document.getElementById("grid");
 
@@ -427,7 +454,9 @@
       const freq = 520 + item.n * 28;
 
       if (isTouch){
+        // pointerdown es más rápido en móvil
         card.addEventListener("pointerdown", () => play(src, freq), { passive: true });
+        // click como fallback
         card.addEventListener("click", () => play(src, freq));
       } else {
         card.addEventListener("pointerenter", () => play(src, freq));
