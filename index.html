@@ -21,7 +21,6 @@
       --accent: rgba(37,99,235,.85);
       --accentSoft: rgba(37,99,235,.18);
 
-      /* altura dinámica de barra alfabeto (se setea por JS) */
       --alphaH: 120px;
     }
 
@@ -66,7 +65,6 @@
       .app{ grid-template-columns: 1fr; }
     }
 
-    /* ===== Sidebar ===== */
     .sidebar{
       background: linear-gradient(180deg, var(--wine), var(--wine2));
       border-right: 2px solid rgba(0,0,0,.45);
@@ -162,7 +160,6 @@
       flex: 0 0 auto;
     }
 
-    /* ===== Main ===== */
     .main{
       padding: 14px 18px calc(var(--alphaH, 120px) + 16px);
       position: relative;
@@ -211,7 +208,6 @@
       z-index: 1;
     }
 
-    /* ===== STAGE ===== */
     .stage{
       flex: 1 1 auto;
       min-height: 0;
@@ -239,7 +235,6 @@
       z-index: 1;
     }
 
-    /* ===== HOME SLIDER ===== */
     .home-slider{
       position:absolute;
       inset:0;
@@ -348,18 +343,15 @@
     }
     .ctrl:hover{ transform: translateY(-1px); background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.22); }
 
-    /* ===== IFRAME (LETRAS / NÚMEROS / COLORES) ===== */
     .frame-wrap{
       position:absolute;
       inset: 0;
       z-index: 5;
       display:none;
-
       border: 0;
       background: transparent;
       box-shadow: none;
       overflow: hidden;
-
       padding: 14px;
     }
 
@@ -373,7 +365,6 @@
       border-radius: 14px;
     }
 
-    /* ===== Alphabet bar ===== */
     .alpha{
       position: fixed;
       left: 0;
@@ -469,47 +460,18 @@
       .frame-wrap{ padding: 12px; }
     }
 
-    /* ✅ Mobile tighten (<=600px) */
     @media (max-width: 600px){
-      .sidebar{
-        padding: 10px 10px 10px;
-      }
-      .side-title{
-        font-size: 17px;
-        margin: 4px 0 10px;
-        letter-spacing: .6px;
-      }
+      .sidebar{ padding: 10px 10px 10px; }
+      .side-title{ font-size: 17px; margin: 4px 0 10px; letter-spacing: .6px; }
       .menu, .submenu{ gap: 9px; }
-      .sub-btn{
-        padding: 11px 12px;
-        font-size: 15px;
-        border-radius: 14px;
-      }
-      .sub-ico{
-        width: 28px; height: 28px;
-        border-radius: 10px;
-        font-size: 14px;
-      }
+      .sub-btn{ padding: 11px 12px; font-size: 15px; border-radius: 14px; }
+      .sub-ico{ width: 28px; height: 28px; border-radius: 10px; font-size: 14px; }
 
-      .main{
-        padding: 10px 12px calc(var(--alphaH, 120px) + 12px);
-      }
+      .main{ padding: 10px 12px calc(var(--alphaH, 120px) + 12px); }
+      .stage{ min-height: 56vh; }
 
-      .stage{
-        min-height: 56vh;
-      }
-
-      .alpha{
-        padding: 8px 10px 10px;
-      }
-
-      .alpha .title{
-        font-size: 13px;
-        letter-spacing: 1px;
-        text-shadow: none;
-        color: rgba(255, 120, 120, 0.9);
-        margin-bottom: 6px;
-      }
+      .alpha{ padding: 8px 10px 10px; }
+      .alpha .title{ font-size: 13px; letter-spacing: 1px; text-shadow: none; color: rgba(255, 120, 120, 0.9); margin-bottom: 6px; }
 
       .letters{
         flex-wrap: nowrap;
@@ -533,7 +495,6 @@
       .frame-wrap{ padding: 8px; }
     }
 
-    /* Toast */
     .toast{
       position: fixed;
       left: 50%;
@@ -579,7 +540,6 @@
             <span aria-hidden="true">›</span>
           </button>
 
-          <!-- ✅ AHORA COLORES TAMBIÉN ABRE EN EL IFRAME -->
           <button class="sub-btn" type="button" data-view="colors">
             <span class="sub-left"><span class="sub-ico" aria-hidden="true">🎨</span>Colores</span>
             <span aria-hidden="true">›</span>
@@ -624,7 +584,6 @@
       </section>
 
       <section class="stage" id="stage" aria-label="Contenido principal">
-        <!-- HOME (Slider) -->
         <div class="home-slider" id="homeSlider" aria-label="Galería principal">
           <div class="stage-controls" aria-label="Controles">
             <button class="ctrl" id="prevBtn" type="button" title="Anterior">‹</button>
@@ -640,7 +599,6 @@
           </div>
         </div>
 
-        <!-- IFRAME (LETRAS / NÚMEROS / COLORES) -->
         <div class="frame-wrap" id="frameWrap" aria-label="Contenido embebido">
           <iframe class="letter-frame" id="letterFrame" title="Contenido" src="about:blank"></iframe>
         </div>
@@ -656,9 +614,6 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    /* =========================
-       Toast
-    ========================= */
     const toastEl = document.getElementById("toast");
     let toastTimer;
 
@@ -677,9 +632,6 @@
       }
     });
 
-    /* =========================
-       Touch mode + alpha height
-    ========================= */
     const isTouch =
       window.matchMedia?.("(pointer: coarse)")?.matches ||
       "ontouchstart" in window ||
@@ -698,33 +650,21 @@
     window.addEventListener("resize", updateAlphaHeight);
     window.addEventListener("orientationchange", updateAlphaHeight);
 
-    /* =========================
-       Auto-scroll (móvil-safe)
-    ========================= */
     const mainScroll = document.getElementById("mainScroll");
     const heroEl  = document.getElementById("hero");
     const stageEl = document.getElementById("stage");
 
     function scrollMainToElement(el){
       if (!mainScroll || !el) return;
-
       const mainRect = mainScroll.getBoundingClientRect();
       const elRect   = el.getBoundingClientRect();
       const top = (elRect.top - mainRect.top) + mainScroll.scrollTop;
-
       mainScroll.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
     }
-
     function scrollToHero(){ scrollMainToElement(heroEl); }
     function scrollToStage(){ scrollMainToElement(stageEl); }
+    function afterLayout(fn){ requestAnimationFrame(() => requestAnimationFrame(fn)); }
 
-    function afterLayout(fn){
-      requestAnimationFrame(() => requestAnimationFrame(fn));
-    }
-
-    /* =========================
-       HOME <-> IFRAME (LETRAS / NÚMEROS / COLORES)
-    ========================= */
     const homeSlider  = document.getElementById("homeSlider");
     const frameWrap   = document.getElementById("frameWrap");
     const letterFrame = document.getElementById("letterFrame");
@@ -748,15 +688,25 @@
       });
     }
 
-    function showEmbed(path, { activeLetter = null, scroll = true } = {}){
+    // ✅ cache buster para que no se quede atorado con html viejo
+    function withCacheBuster(path){
+      const sep = path.includes("?") ? "&" : "?";
+      return `${path}${sep}v=${Date.now()}`;
+    }
+
+    function showEmbed(path, { activeLetter = null, scroll = true, msg = null } = {}){
+      // pausa slider mientras embed está activo
+      isPaused = true;
+
       homeSlider.style.display = "none";
       frameWrap.style.display = "block";
-      letterFrame.src = path;
+      letterFrame.src = withCacheBuster(path);
       setActiveLetter(activeLetter);
 
       afterLayout(() => {
         updateAlphaHeight();
         if (scroll) scrollToStage();
+        if (msg) toast(msg);
       });
     }
 
@@ -765,23 +715,17 @@
         toast(`Letra ${letter}: próximamente`);
         return;
       }
-      showEmbed(`letras-spa-lite/${letter}.html`, { activeLetter: letter, scroll: true });
+      showEmbed(`letras-spa-lite/${letter}.html`, { activeLetter: letter, scroll: true, msg: `Letra ${letter}` });
     }
 
     function showNumbers(){
-      showEmbed(`1-10-A.html`, { activeLetter: null, scroll: true });
-      toast("Números: 1 a 10");
+      showEmbed(`1-10-A.html`, { activeLetter: null, scroll: true, msg: "Números: 1 a 10" });
     }
 
-    // ✅ NUEVO: COLORES
     function showColors(){
-      showEmbed(`pages/colores.html`, { activeLetter: null, scroll: true });
-      toast("Colores");
+      showEmbed(`pages/colores.html`, { activeLetter: null, scroll: true, msg: "Colores" });
     }
 
-    /* =========================
-       Alfabeto Mixe
-    ========================= */
     const letters = ["A","E","I","J","K","M","N","O","P","T","U","W","X","Y"];
     const lettersWrap = document.getElementById("letters");
     const shrinkDelayMs = 180;
@@ -806,20 +750,16 @@
       lettersWrap.appendChild(b);
     });
 
-    /* Sidebar: Inicio / Números / Colores */
     document.addEventListener("click", (e) => {
       const v = e.target.closest("[data-view]");
       if (!v) return;
 
       const view = v.getAttribute("data-view");
-      if (view === "home") showHome({ scroll: true });
+      if (view === "home") { isPaused = false; showHome({ scroll: true }); }
       if (view === "numbers") showNumbers();
       if (view === "colors") showColors();
     });
 
-    /* =========================
-       Slider (HOME)
-    ========================= */
     const SLIDES = [
       { src: "FondoDicMIxe.png", caption: "Cultura Mixe de Guichicovi (arte/identidad)" },
       { src: "Ada.jpeg",         caption: "Ayuuk vivo: música, vestimenta y orgullo" },
@@ -845,10 +785,8 @@
     function setActive(idx){
       if (!imgs.length) return;
       current = (idx + imgs.length) % imgs.length;
-
       imgs.forEach((img, i) => img.classList.toggle("active", i === current));
       dots.forEach((d, i) => d.classList.toggle("active", i === current));
-
       captionEl.textContent = visibleSlides[current]?.caption || "";
     }
 
@@ -923,10 +861,9 @@
     nextBtn.addEventListener("click", () => next());
     pauseBtn.addEventListener("click", () => togglePause());
 
-    stageEl.addEventListener("mouseenter", () => { isPaused = true; });
-    stageEl.addEventListener("mouseleave", () => { isPaused = false; });
+    stageEl.addEventListener("mouseenter", () => { if (homeSlider.style.display !== "none") isPaused = true; });
+    stageEl.addEventListener("mouseleave", () => { if (homeSlider.style.display !== "none") isPaused = false; });
 
-    // Inicio
     showHome({ scroll: false });
     initSlider();
   </script>

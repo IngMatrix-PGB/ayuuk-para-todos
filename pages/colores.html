@@ -19,6 +19,9 @@
 
       --hintRed: rgba(248,113,113,.98);
       --hintRedGlow: rgba(248,113,113,.22);
+
+      --swBorder: rgba(255,255,255,.18);
+      --swShadow: rgba(0,0,0,.55);
     }
 
     *{ box-sizing: border-box; }
@@ -146,8 +149,11 @@
 
     .es{
       font-size: 18px;
-      line-height: 1.15;
+      line-height: 1.1;
       letter-spacing: .2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       font-weight: 900;
       opacity: .92;
       color: var(--muted);
@@ -160,31 +166,24 @@
       gap: 10px;
     }
 
-    /* ✅ el “dibujo” del color */
     .swatch{
       width: 64px;
       height: 64px;
       border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.18);
+      border: 1px solid var(--swBorder);
       background: rgba(0,0,0,.35);
       box-shadow: 0 14px 28px rgba(0,0,0,.26);
       position: relative;
-      overflow: hidden;
+      overflow:hidden;
     }
+
     .swatch::after{
       content:"";
       position:absolute;
       inset:0;
-      background: linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,0));
+      background: radial-gradient(18px 18px at 30% 25%, rgba(255,255,255,.35), transparent 60%);
+      opacity:.8;
       pointer-events:none;
-    }
-    .swatch.pattern{
-      background-size: 10px 10px;
-      background-image: linear-gradient(45deg, rgba(255,255,255,.14) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.14) 50%, rgba(255,255,255,.14) 75%, transparent 75%, transparent);
-    }
-    .swatch.striped{
-      background-size: 12px 12px;
-      background-image: repeating-linear-gradient(45deg, rgba(255,255,255,.22) 0 3px, transparent 3px 9px);
     }
 
     .audio-btn{
@@ -248,7 +247,7 @@
       box-shadow: 0 16px 38px rgba(0,0,0,.40);
     }
 
-    /* ✅ MODO IFRAME */
+    /* ✅ MODO IFRAME (igual que 1-10-A) */
     body.in-iframe .wrap{ padding: 0 0 160px; }
     body.in-iframe .panel{
       border: 0;
@@ -291,9 +290,7 @@
   </div>
 
   <script>
-    if (window.self !== window.top) {
-      document.body.classList.add("in-iframe");
-    }
+    if (window.self !== window.top) document.body.classList.add("in-iframe");
 
     const isTouch =
       window.matchMedia?.("(pointer: coarse)")?.matches ||
@@ -307,7 +304,7 @@
     player.preload = "auto";
     player.playsInline = true;
 
-    let audioUnlocked = !isTouch;
+    let audioUnlocked = false;
 
     function showUnlock(){
       unlock.classList.add("show");
@@ -331,7 +328,7 @@
       return audioCtx;
     }
 
-    function beep(freq=660, ms=120){
+    function beep(freq=660, ms=140){
       const ctx = ensureAudioContext();
       if (!ctx) return;
 
@@ -346,7 +343,7 @@
 
       const now = ctx.currentTime;
       g.gain.setValueAtTime(0.0001, now);
-      g.gain.exponentialRampToValueAtTime(0.14, now + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.15, now + 0.01);
       g.gain.exponentialRampToValueAtTime(0.0001, now + ms/1000);
 
       o.start(now);
@@ -358,7 +355,7 @@
       if (ctx && ctx.state === "suspended") {
         try { await ctx.resume(); } catch(e) {}
       }
-      try { beep(520, 80); } catch(e) {}
+      try { beep(520, 90); } catch(e) {}
       audioUnlocked = true;
       hideUnlock();
     }
@@ -369,8 +366,9 @@
         return;
       }
 
+      // si aún no existe el mp3, caemos a beep
       if (!src){
-        beep(fallbackFreq, 160);
+        beep(fallbackFreq, 170);
         haptic();
         return;
       }
@@ -382,12 +380,13 @@
       player.play()
         .then(() => haptic())
         .catch(() => {
-          beep(fallbackFreq, 160);
+          beep(fallbackFreq, 170);
           haptic();
         });
     }
 
     if (isTouch) setTimeout(() => showUnlock(), 450);
+    else audioUnlocked = true;
 
     unlockBtn.addEventListener("click", async (e) => {
       e.preventDefault();
@@ -395,43 +394,42 @@
       await unlockAudio();
     });
 
-    // ✅ DATA (mejor definición en español incluida)
-    // audio: crea tus mp3 así: /ayuuk-para-todos/Colores/JINY.mp3 etc.
+    // ✅ IMPORTANTE:
+    // Este HTML vive en /pages/colores.html
+    // Si tus audios están en /Colores/*.mp3 en la raíz del proyecto:
+    // usa "../Colores/ARCHIVO.mp3"
     const data = [
-      { mixe:"JINY",       es:"Negro",                                      audio:"Colores/JINY.mp3",       swatch:"#0b0b0b" },
-      { mixe:"POOB",       es:"Blanco",                                     audio:"Colores/POOB.mp3",       swatch:"#f7f7f7" },
-      { mixe:"TSAPTS",     es:"Rojo",                                       audio:"Colores/TSAPTS.mp3",     swatch:"#e53935" },
-      { mixe:"TSUXK",      es:"Verde",                                      audio:"Colores/TSUXK.mp3",      swatch:"#2e7d32" },
-      { mixe:"PU’TS",      es:"Amarillo",                                   audio:"Colores/PU_TS.mp3",      swatch:"#f7d117" },
-      { mixe:"UKY",        es:"Azul",                                       audio:"Colores/UKY.mp3",        swatch:"#1e5bd7" },
-      { mixe:"OBYU’TS",    es:"Naranja",                                    audio:"Colores/OBYU_TS.mp3",    swatch:"#ff7a1a" },
+      { mixe:"JINY",       es:"Negro",                       color:"#0b0b0b", audio:"../Colores/JINY.mp3" },
+      { mixe:"POOB",       es:"Blanco",                      color:"#f3f4f6", audio:"../Colores/POOB.mp3" },
+      { mixe:"TSAPTS",     es:"Rojo",                        color:"#ef4444", audio:"../Colores/TSAPTS.mp3" },
+      { mixe:"TSUXK",      es:"Verde",                       color:"#2e7d32", audio:"../Colores/TSUXK.mp3" },
+      { mixe:"PU’TS",      es:"Amarillo",                    color:"#facc15", audio:"../Colores/PU_TS.mp3" },
+      { mixe:"UKY",        es:"Azul",                        color:"#2563eb", audio:"../Colores/UKY.mp3" },
+      { mixe:"OBYU’TS",    es:"Naranja",                     color:"#fb923c", audio:"../Colores/OBYU_TS.mp3" },
 
-      { mixe:"KAMBIIDY",   es:"Morado (lila / vino)",                        audio:"Colores/KAMBIIDY.mp3",   swatch:"#7a3db8" },
-      { mixe:"TSIXY",      es:"Beige (color arena / paja)",                  audio:"Colores/TSIXY.mp3",      swatch:"#d8c39a" },
-      { mixe:"PU’DY",      es:"Crema (blanco con beige)",                    audio:"Colores/PU_DY.mp3",      swatch:"linear-gradient(135deg,#f6f2e8,#d8c39a)" },
+      { mixe:"KAMBIIDY",   es:"Morado (lila / vino)",        color:"#7c3aed", audio:"../Colores/KAMBIIDY.mp3" },
+      { mixe:"TSIXY",      es:"Beige (arena / paja)",        color:"#d6c4a3", audio:"../Colores/TSIXY.mp3" },
+      { mixe:"PU’DY",      es:"Crema (blanco con beige)",    color:"#eadfc8", audio:"../Colores/PU_DY.mp3" },
 
-      { mixe:"JAAMDSUXK",  es:"Verde limón",                                audio:"Colores/JAAMDSUXK.mp3",  swatch:"#b7f20a" },
-      { mixe:"JAAMBU’TS",  es:"Amarillo claro",                              audio:"Colores/JAAMBU_TS.mp3",  swatch:"#fff2a1" },
+      { mixe:"JAAMDSUXK",  es:"Verde limón",                 color:"#a3e635", audio:"../Colores/JAAMDSUXK.mp3" },
+      { mixe:"JAAMBU’TS",  es:"Amarillo claro",              color:"#fde68a", audio:"../Colores/JAAMBU_TS.mp3" },
 
-      { mixe:"KATS",       es:"Jaspeado",                                   audio:"Colores/KATS.mp3",       swatch:"#9e9e9e", pattern:"pattern" },
-      { mixe:"XAAG",       es:"Rayado",                                     audio:"Colores/XAAG.mp3",       swatch:"#8aa4ff", pattern:"striped" },
+      { mixe:"KATS",       es:"Jaspeado",                    color:"#9ca3af", audio:"../Colores/KATS.mp3" },
+      { mixe:"XAAG",       es:"Rayado",                      color:"#93c5fd", audio:"../Colores/XAAG.mp3" },
 
-      { mixe:"NA’ATSAPTS", es:"Rojizo",                                     audio:"Colores/NA_ATSAPTS.mp3", swatch:"#c45b5b" },
-      { mixe:"NA’AUKY",    es:"Azulado",                                    audio:"Colores/NA_AUKY.mp3",    swatch:"#6e88d6" },
-      { mixe:"NA’APU’TS",  es:"Amarillento",                                audio:"Colores/NA_APU_TS.mp3",  swatch:"#e8d37b" },
-      { mixe:"NA’ATSUXK",  es:"Verdoso",                                    audio:"Colores/NA_ATSUXK.mp3",  swatch:"#7fb57a" },
-      { mixe:"NA’AJAAM",   es:"Grisáceo",                                   audio:"Colores/NA_AJAAM.mp3",   swatch:"#8c8f96" },
+      { mixe:"NA’ATSAPTS", es:"Rojizo",                      color:"#c24141", audio:"../Colores/NA_ATSAPTS.mp3" },
+      { mixe:"NA’AUKY",    es:"Azulado",                     color:"#5b7cdb", audio:"../Colores/NA_AUKY.mp3" },
+      { mixe:"NA’APU’TS",  es:"Amarillento",                 color:"#f2d35c", audio:"../Colores/NA_APU_TS.mp3" },
+      { mixe:"NA’ATSUXK",  es:"Verdoso",                     color:"#4d7c5a", audio:"../Colores/NA_ATSUXK.mp3" },
+      { mixe:"NA’AJAAM",   es:"Grisáceo",                    color:"#9aa3ad", audio:"../Colores/NA_AJAAM.mp3" },
     ];
 
     const grid = document.getElementById("grid");
 
-    for (let i = 0; i < data.length; i++){
-      const item = data[i];
+    data.forEach((item, idx) => {
       const card = document.createElement("div");
       card.className = "card";
       card.tabIndex = 0;
-
-      const swatchClass = item.pattern ? `swatch ${item.pattern}` : "swatch";
 
       card.innerHTML = `
         <div class="row">
@@ -440,36 +438,26 @@
             <div class="es">${item.es}</div>
           </div>
           <div class="right">
-            <div class="${swatchClass}" aria-hidden="true"></div>
+            <div class="swatch" style="background:${item.color}"></div>
             <div class="audio-btn">🔊 Audio</div>
           </div>
         </div>
       `;
 
-      // pintar swatch
-      const swatchEl = card.querySelector(".swatch");
-      if (typeof item.swatch === "string" && item.swatch.startsWith("linear-gradient")) {
-        swatchEl.style.background = item.swatch;
-      } else {
-        swatchEl.style.background = item.swatch;
-      }
-
-      // Nota: en móvil conviene frecuencia distinta para no “igualar”
-      const fallbackFreq = 420 + i * 22;
-
       const src = item.audio || null;
+      const freq = 520 + (idx % 12) * 28;
 
       if (isTouch){
-        card.addEventListener("pointerdown", () => play(src, fallbackFreq), { passive: true });
-        card.addEventListener("click", () => play(src, fallbackFreq));
+        card.addEventListener("pointerdown", () => play(src, freq), { passive: true });
+        card.addEventListener("click", () => play(src, freq));
       } else {
-        card.addEventListener("pointerenter", () => play(src, fallbackFreq));
-        card.addEventListener("focus", () => play(src, fallbackFreq));
-        card.addEventListener("click", () => play(src, fallbackFreq));
+        card.addEventListener("pointerenter", () => play(src, freq));
+        card.addEventListener("focus", () => play(src, freq));
+        card.addEventListener("click", () => play(src, freq));
       }
 
       grid.appendChild(card);
-    }
+    });
   </script>
 </body>
 </html>
