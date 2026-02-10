@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Colores — Ayuuk para Todos</title>
+
+  <style>
+    :root{
+      --text: rgba(242,246,255,.96);
+      --ease: cubic-bezier(.2,.85,.2,1);
+
+      --accent: rgba(37,99,235,.55);
+      --accentSoft: rgba(37,99,235,.18);
+
+      --card: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.14);
+      --muted: rgba(242,246,255,.88);
+
+      --hintRed: rgba(248,113,113,.98);
+      --hintRedGlow: rgba(248,113,113,.22);
+    }
+
+    *{ box-sizing: border-box; }
+    html, body{ height: 100%; }
+
+    body{
+      margin: 0;
+      color: var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: transparent;
+      overflow: auto;
+    }
+
+    .wrap{
+      padding: 14px;
+      padding-bottom: 140px;
+    }
+    @media (max-width: 600px){
+      .wrap{ padding-bottom: 160px; }
+    }
+
+    .panel{
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      box-shadow: 0 14px 30px rgba(0,0,0,.28);
+      overflow:hidden;
+      display:flex;
+      flex-direction: column;
+    }
+
+    .panel-head{
+      padding: 12px 14px 10px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.22));
+      display:flex;
+      flex-direction: column;
+      align-items:center;
+      justify-content:center;
+      gap: 6px;
+    }
+
+    .title{
+      margin: 0;
+      font-size: 15px;
+      font-weight: 1000;
+      letter-spacing: .35px;
+      opacity: .95;
+      text-align:center;
+    }
+
+    .hint{
+      font-size: 14px;
+      font-weight: 950;
+      color: var(--hintRed);
+      text-align: center;
+      line-height: 1.15;
+      white-space: nowrap;
+      text-shadow: 0 0 18px var(--hintRedGlow);
+    }
+    @media (max-width: 720px){
+      .hint{
+        font-size: 12.5px;
+        white-space: normal;
+      }
+    }
+
+    .panel-body{ padding: 14px; }
+
+    .grid{
+      display:grid;
+      gap: 12px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: stretch;
+    }
+    @media (max-width: 720px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      box-shadow: 0 14px 30px rgba(0,0,0,.28);
+      padding: 14px 14px;
+      cursor: pointer;
+      user-select: none;
+      transition: transform .14s var(--ease), background .14s var(--ease), border-color .14s var(--ease);
+      outline:none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    .card:hover,
+    .card:focus-visible{
+      transform: translateY(-2px) scale(1.01);
+      background: var(--accentSoft);
+      border-color: var(--accent);
+    }
+
+    .row{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .pair{
+      display:flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    .mixe{
+      font-size: 22px;
+      line-height: 1.1;
+      letter-spacing: .4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 1000;
+    }
+
+    .es{
+      font-size: 18px;
+      line-height: 1.15;
+      letter-spacing: .2px;
+      font-weight: 900;
+      opacity: .92;
+      color: var(--muted);
+    }
+
+    .right{
+      flex: 0 0 auto;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+    }
+
+    /* ✅ el “dibujo” del color */
+    .swatch{
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.35);
+      box-shadow: 0 14px 28px rgba(0,0,0,.26);
+      position: relative;
+      overflow: hidden;
+    }
+    .swatch::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,0));
+      pointer-events:none;
+    }
+    .swatch.pattern{
+      background-size: 10px 10px;
+      background-image: linear-gradient(45deg, rgba(255,255,255,.14) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.14) 50%, rgba(255,255,255,.14) 75%, transparent 75%, transparent);
+    }
+    .swatch.striped{
+      background-size: 12px 12px;
+      background-image: repeating-linear-gradient(45deg, rgba(255,255,255,.22) 0 3px, transparent 3px 9px);
+    }
+
+    .audio-btn{
+      flex: 0 0 auto;
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.35);
+      color: rgba(242,246,255,.95);
+      font-weight: 950;
+      font-size: 13px;
+      box-shadow: 0 14px 30px rgba(0,0,0,.24);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 600px){
+      .card{ padding: 16px; }
+      .audio-btn{ font-size: 14px; padding: 10px 14px; }
+      .mixe{ font-size: 20px; }
+      .es{ font-size: 16px; }
+      .swatch{ width: 60px; height: 60px; }
+    }
+
+    .unlock{
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display:none;
+      place-items:center;
+      padding: 18px;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(10px);
+    }
+    .unlock.show{ display:grid; }
+
+    .unlock-card{
+      width: min(520px, 92vw);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(8,18,37,.82);
+      box-shadow: 0 22px 60px rgba(0,0,0,.55);
+      padding: 16px;
+      text-align:center;
+    }
+    .unlock-card h2{ margin: 6px 0 6px; font-size: 18px; font-weight: 1000; }
+    .unlock-card p{ margin: 0 0 12px; font-size: 13px; opacity: .9; line-height: 1.35; }
+    .unlock-btn{
+      width: 100%;
+      border: 1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(37,99,235,.85), rgba(37,99,235,.55));
+      color: white;
+      border-radius: 14px;
+      padding: 12px 14px;
+      cursor:pointer;
+      font-weight: 1000;
+      letter-spacing: .3px;
+      box-shadow: 0 16px 38px rgba(0,0,0,.40);
+    }
+
+    /* ✅ MODO IFRAME */
+    body.in-iframe .wrap{ padding: 0 0 160px; }
+    body.in-iframe .panel{
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      display: block;
+    }
+    body.in-iframe .panel-head{
+      border-bottom: 0;
+      background: transparent;
+      padding: 10px 14px 6px;
+    }
+    body.in-iframe .panel-body{
+      padding: 10px 14px 14px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="panel">
+      <div class="panel-head">
+        <div class="title">Colores en Ayuuk (Mixe)</div>
+        <div class="hint">PC: pasa el mouse para escuchar audio • Móvil: toca una tarjeta para escuchar</div>
+      </div>
+
+      <div class="panel-body">
+        <div class="grid" id="grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="unlock" id="unlock" aria-hidden="true">
+    <div class="unlock-card" role="dialog" aria-modal="true" aria-labelledby="unlockTitle">
+      <h2 id="unlockTitle">Activar audio</h2>
+      <p>Por seguridad del navegador, el audio requiere 1 toque inicial.<br/>Después podrás reproducir con solo tocar.</p>
+      <button class="unlock-btn" id="unlockBtn" type="button">✅ Tocar para activar</button>
+    </div>
+  </div>
+
+  <script>
+    if (window.self !== window.top) {
+      document.body.classList.add("in-iframe");
+    }
+
+    const isTouch =
+      window.matchMedia?.("(pointer: coarse)")?.matches ||
+      "ontouchstart" in window ||
+      navigator.maxTouchPoints > 0;
+
+    const unlock = document.getElementById("unlock");
+    const unlockBtn = document.getElementById("unlockBtn");
+
+    const player = new Audio();
+    player.preload = "auto";
+    player.playsInline = true;
+
+    let audioUnlocked = !isTouch;
+
+    function showUnlock(){
+      unlock.classList.add("show");
+      unlock.setAttribute("aria-hidden", "false");
+    }
+    function hideUnlock(){
+      unlock.classList.remove("show");
+      unlock.setAttribute("aria-hidden", "true");
+    }
+
+    function haptic(){
+      if (isTouch && navigator.vibrate) navigator.vibrate(10);
+    }
+
+    // WebAudio unlock
+    let audioCtx;
+    function ensureAudioContext(){
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return null;
+      audioCtx = audioCtx || new Ctx();
+      return audioCtx;
+    }
+
+    function beep(freq=660, ms=120){
+      const ctx = ensureAudioContext();
+      if (!ctx) return;
+
+      if (ctx.state === "suspended") ctx.resume().catch(()=>{});
+
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = "sine";
+      o.frequency.value = freq;
+      o.connect(g);
+      g.connect(ctx.destination);
+
+      const now = ctx.currentTime;
+      g.gain.setValueAtTime(0.0001, now);
+      g.gain.exponentialRampToValueAtTime(0.14, now + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + ms/1000);
+
+      o.start(now);
+      o.stop(now + ms/1000);
+    }
+
+    async function unlockAudio(){
+      const ctx = ensureAudioContext();
+      if (ctx && ctx.state === "suspended") {
+        try { await ctx.resume(); } catch(e) {}
+      }
+      try { beep(520, 80); } catch(e) {}
+      audioUnlocked = true;
+      hideUnlock();
+    }
+
+    function play(src, fallbackFreq){
+      if (isTouch && !audioUnlocked){
+        showUnlock();
+        return;
+      }
+
+      if (!src){
+        beep(fallbackFreq, 160);
+        haptic();
+        return;
+      }
+
+      const abs = new URL(src, window.location.href).href;
+      if (player.src !== abs) player.src = src;
+
+      try{ player.currentTime = 0; }catch(e){}
+      player.play()
+        .then(() => haptic())
+        .catch(() => {
+          beep(fallbackFreq, 160);
+          haptic();
+        });
+    }
+
+    if (isTouch) setTimeout(() => showUnlock(), 450);
+
+    unlockBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      await unlockAudio();
+    });
+
+    // ✅ DATA (mejor definición en español incluida)
+    // audio: crea tus mp3 así: /ayuuk-para-todos/Colores/JINY.mp3 etc.
+    const data = [
+      { mixe:"JINY",       es:"Negro",                                      audio:"Colores/JINY.mp3",       swatch:"#0b0b0b" },
+      { mixe:"POOB",       es:"Blanco",                                     audio:"Colores/POOB.mp3",       swatch:"#f7f7f7" },
+      { mixe:"TSAPTS",     es:"Rojo",                                       audio:"Colores/TSAPTS.mp3",     swatch:"#e53935" },
+      { mixe:"TSUXK",      es:"Verde",                                      audio:"Colores/TSUXK.mp3",      swatch:"#2e7d32" },
+      { mixe:"PU’TS",      es:"Amarillo",                                   audio:"Colores/PU_TS.mp3",      swatch:"#f7d117" },
+      { mixe:"UKY",        es:"Azul",                                       audio:"Colores/UKY.mp3",        swatch:"#1e5bd7" },
+      { mixe:"OBYU’TS",    es:"Naranja",                                    audio:"Colores/OBYU_TS.mp3",    swatch:"#ff7a1a" },
+
+      { mixe:"KAMBIIDY",   es:"Morado (lila / vino)",                        audio:"Colores/KAMBIIDY.mp3",   swatch:"#7a3db8" },
+      { mixe:"TSIXY",      es:"Beige (color arena / paja)",                  audio:"Colores/TSIXY.mp3",      swatch:"#d8c39a" },
+      { mixe:"PU’DY",      es:"Crema (blanco con beige)",                    audio:"Colores/PU_DY.mp3",      swatch:"linear-gradient(135deg,#f6f2e8,#d8c39a)" },
+
+      { mixe:"JAAMDSUXK",  es:"Verde limón",                                audio:"Colores/JAAMDSUXK.mp3",  swatch:"#b7f20a" },
+      { mixe:"JAAMBU’TS",  es:"Amarillo claro",                              audio:"Colores/JAAMBU_TS.mp3",  swatch:"#fff2a1" },
+
+      { mixe:"KATS",       es:"Jaspeado",                                   audio:"Colores/KATS.mp3",       swatch:"#9e9e9e", pattern:"pattern" },
+      { mixe:"XAAG",       es:"Rayado",                                     audio:"Colores/XAAG.mp3",       swatch:"#8aa4ff", pattern:"striped" },
+
+      { mixe:"NA’ATSAPTS", es:"Rojizo",                                     audio:"Colores/NA_ATSAPTS.mp3", swatch:"#c45b5b" },
+      { mixe:"NA’AUKY",    es:"Azulado",                                    audio:"Colores/NA_AUKY.mp3",    swatch:"#6e88d6" },
+      { mixe:"NA’APU’TS",  es:"Amarillento",                                audio:"Colores/NA_APU_TS.mp3",  swatch:"#e8d37b" },
+      { mixe:"NA’ATSUXK",  es:"Verdoso",                                    audio:"Colores/NA_ATSUXK.mp3",  swatch:"#7fb57a" },
+      { mixe:"NA’AJAAM",   es:"Grisáceo",                                   audio:"Colores/NA_AJAAM.mp3",   swatch:"#8c8f96" },
+    ];
+
+    const grid = document.getElementById("grid");
+
+    for (let i = 0; i < data.length; i++){
+      const item = data[i];
+      const card = document.createElement("div");
+      card.className = "card";
+      card.tabIndex = 0;
+
+      const swatchClass = item.pattern ? `swatch ${item.pattern}` : "swatch";
+
+      card.innerHTML = `
+        <div class="row">
+          <div class="pair">
+            <div class="mixe">${item.mixe}</div>
+            <div class="es">${item.es}</div>
+          </div>
+          <div class="right">
+            <div class="${swatchClass}" aria-hidden="true"></div>
+            <div class="audio-btn">🔊 Audio</div>
+          </div>
+        </div>
+      `;
+
+      // pintar swatch
+      const swatchEl = card.querySelector(".swatch");
+      if (typeof item.swatch === "string" && item.swatch.startsWith("linear-gradient")) {
+        swatchEl.style.background = item.swatch;
+      } else {
+        swatchEl.style.background = item.swatch;
+      }
+
+      // Nota: en móvil conviene frecuencia distinta para no “igualar”
+      const fallbackFreq = 420 + i * 22;
+
+      const src = item.audio || null;
+
+      if (isTouch){
+        card.addEventListener("pointerdown", () => play(src, fallbackFreq), { passive: true });
+        card.addEventListener("click", () => play(src, fallbackFreq));
+      } else {
+        card.addEventListener("pointerenter", () => play(src, fallbackFreq));
+        card.addEventListener("focus", () => play(src, fallbackFreq));
+        card.addEventListener("click", () => play(src, fallbackFreq));
+      }
+
+      grid.appendChild(card);
+    }
+  </script>
+</body>
+</html>

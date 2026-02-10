@@ -348,7 +348,7 @@
     }
     .ctrl:hover{ transform: translateY(-1px); background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.22); }
 
-    /* ===== IFRAME (LETRAS / NÚMEROS) ===== */
+    /* ===== IFRAME (LETRAS / NÚMEROS / COLORES) ===== */
     .frame-wrap{
       position:absolute;
       inset: 0;
@@ -571,7 +571,6 @@
             <span aria-hidden="true">›</span>
           </button>
 
-          <!-- ✅ AHORA NÚMEROS SE ABRE EN EL IFRAME DEL STAGE -->
           <button class="sub-btn" type="button" data-view="numbers">
             <span class="sub-left">
               <span class="sub-ico" aria-hidden="true">🔢</span>
@@ -580,7 +579,8 @@
             <span aria-hidden="true">›</span>
           </button>
 
-          <button class="sub-btn" type="button" data-toast="Próximamente: Colores.">
+          <!-- ✅ AHORA COLORES TAMBIÉN ABRE EN EL IFRAME -->
+          <button class="sub-btn" type="button" data-view="colors">
             <span class="sub-left"><span class="sub-ico" aria-hidden="true">🎨</span>Colores</span>
             <span aria-hidden="true">›</span>
           </button>
@@ -640,7 +640,7 @@
           </div>
         </div>
 
-        <!-- IFRAME (LETRAS / NÚMEROS) -->
+        <!-- IFRAME (LETRAS / NÚMEROS / COLORES) -->
         <div class="frame-wrap" id="frameWrap" aria-label="Contenido embebido">
           <iframe class="letter-frame" id="letterFrame" title="Contenido" src="about:blank"></iframe>
         </div>
@@ -723,7 +723,7 @@
     }
 
     /* =========================
-       HOME <-> IFRAME (LETRAS / NÚMEROS)
+       HOME <-> IFRAME (LETRAS / NÚMEROS / COLORES)
     ========================= */
     const homeSlider  = document.getElementById("homeSlider");
     const frameWrap   = document.getElementById("frameWrap");
@@ -769,9 +769,14 @@
     }
 
     function showNumbers(){
-      // ✅ carga dentro del stage, igual que M
       showEmbed(`1-10-A.html`, { activeLetter: null, scroll: true });
       toast("Números: 1 a 10");
+    }
+
+    // ✅ NUEVO: COLORES
+    function showColors(){
+      showEmbed(`pages/colores.html`, { activeLetter: null, scroll: true });
+      toast("Colores");
     }
 
     /* =========================
@@ -801,7 +806,7 @@
       lettersWrap.appendChild(b);
     });
 
-    /* Sidebar: Inicio / Números */
+    /* Sidebar: Inicio / Números / Colores */
     document.addEventListener("click", (e) => {
       const v = e.target.closest("[data-view]");
       if (!v) return;
@@ -809,6 +814,7 @@
       const view = v.getAttribute("data-view");
       if (view === "home") showHome({ scroll: true });
       if (view === "numbers") showNumbers();
+      if (view === "colors") showColors();
     });
 
     /* =========================
