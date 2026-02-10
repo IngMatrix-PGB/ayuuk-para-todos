@@ -348,7 +348,7 @@
     }
     .ctrl:hover{ transform: translateY(-1px); background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.22); }
 
-    /* ===== IFRAME (LETRAS) ===== */
+    /* ===== IFRAME (LETRAS / NÚMEROS) ===== */
     .frame-wrap{
       position:absolute;
       inset: 0;
@@ -382,7 +382,7 @@
       z-index: 40;
       background: linear-gradient(180deg, rgba(10,20,45,.90), rgba(5,10,22,.96));
       border-top: 1px solid rgba(255,255,255,.14);
-      padding: 12px 12px 14px; /* ⬅️ un poquito menos alto */
+      padding: 12px 12px 14px;
       backdrop-filter: blur(10px);
       box-shadow: 0 -18px 40px rgba(0,0,0,.45);
     }
@@ -402,13 +402,13 @@
 
     .letters{
       display:flex;
-      gap: 10px;            /* ✅ menos espacio entre letras */
+      gap: 10px;
       flex-wrap: wrap;
       justify-content: center;
     }
 
     .letter{
-      width: 58px;          /* ✅ un poco más compacto */
+      width: 58px;
       height: 58px;
       border-radius: 16px;
       display:grid;
@@ -469,11 +469,8 @@
       .frame-wrap{ padding: 12px; }
     }
 
-    /* ✅ Mobile tighten (<=600px) */
     @media (max-width: 600px){
-      .sidebar{
-        padding: 10px 10px 10px;
-      }
+      .sidebar{ padding: 10px 10px 10px; }
       .side-title{
         font-size: 17px;
         margin: 4px 0 10px;
@@ -491,25 +488,18 @@
         font-size: 14px;
       }
 
-      .main{
-        padding: 10px 12px calc(var(--alphaH, 120px) + 12px);
-      }
+      .main{ padding: 10px 12px calc(var(--alphaH, 120px) + 12px); }
 
-      /* ✅ CLAVE: asegura altura visible para slider/iframe en móviles */
-      .stage{
-        min-height: 56vh;
-      }
+      .stage{ min-height: 56vh; }
 
-      .alpha{
-        padding: 8px 10px 10px; /* ✅ menos alto */
-      }
+      .alpha{ padding: 8px 10px 10px; }
 
       .alpha .title{
         font-size: 13px;
         letter-spacing: 1px;
         text-shadow: none;
         color: rgba(255, 120, 120, 0.9);
-        margin-bottom: 6px; /* ✅ menos margen */
+        margin-bottom: 6px;
       }
 
       .letters{
@@ -517,21 +507,20 @@
         overflow-x: auto;
         overflow-y: hidden;
         justify-content: flex-start;
-        gap: 8px;           /* ✅ menos espacio */
-        padding-bottom: 2px;/* ✅ menos padding */
+        gap: 8px;
+        padding-bottom: 2px;
         -webkit-overflow-scrolling: touch;
         scroll-snap-type: x mandatory;
       }
 
       .letter{
-        width: 46px;        /* ✅ más compacto */
+        width: 46px;
         height: 46px;
         font-size: 18px;
         flex: 0 0 auto;
         scroll-snap-align: start;
       }
 
-      /* iframe padding más apretado en móvil */
       .frame-wrap{ padding: 8px; }
     }
 
@@ -573,13 +562,14 @@
             <span aria-hidden="true">›</span>
           </button>
 
-          <a class="sub-btn" href="1-10-A.html">
+          <!-- ✅ AHORA NÚMEROS CARGA EN EL STAGE/IFRAME -->
+          <button class="sub-btn" type="button" data-view="nums-1-10">
             <span class="sub-left">
               <span class="sub-ico" aria-hidden="true">🔢</span>
               Números
             </span>
             <span aria-hidden="true">›</span>
-          </a>
+          </button>
 
           <button class="sub-btn" type="button" data-toast="Próximamente: Colores.">
             <span class="sub-left"><span class="sub-ico" aria-hidden="true">🎨</span>Colores</span>
@@ -641,9 +631,9 @@
           </div>
         </div>
 
-        <!-- LETRAS (iframe) -->
-        <div class="frame-wrap" id="frameWrap" aria-label="Diccionario por letra">
-          <iframe class="letter-frame" id="letterFrame" title="Letra" src="about:blank"></iframe>
+        <!-- IFRAME (LETRAS / NÚMEROS) -->
+        <div class="frame-wrap" id="frameWrap" aria-label="Contenido embebido">
+          <iframe class="letter-frame" id="letterFrame" title="Contenido" src="about:blank"></iframe>
         </div>
       </section>
     </main>
@@ -724,13 +714,13 @@
     }
 
     /* =========================
-       HOME <-> LETRAS (UI)
+       HOME <-> IFRAME (LETRAS / NÚMEROS)
     ========================= */
     const homeSlider  = document.getElementById("homeSlider");
     const frameWrap   = document.getElementById("frameWrap");
     const letterFrame = document.getElementById("letterFrame");
 
-    const AVAILABLE = new Set(["M"]); // por ahora
+    const AVAILABLE_LETTERS = new Set(["M"]); // por ahora
 
     function setActiveLetter(L){
       document.querySelectorAll(".letter").forEach(btn => {
@@ -741,6 +731,7 @@
     function showHome({ scroll = true } = {}){
       frameWrap.style.display = "none";
       homeSlider.style.display = "block";
+      letterFrame.src = "about:blank";
       setActiveLetter(null);
 
       afterLayout(() => {
@@ -749,23 +740,41 @@
       });
     }
 
-    function showLetter(letter){
-      if (!AVAILABLE.has(letter)){
-        toast(`Letra ${letter}: próximamente`);
-        return;
-      }
-
+    function showEmbedded(src){
       homeSlider.style.display = "none";
       frameWrap.style.display = "block";
-      letterFrame.src = `letras-spa-lite/${letter}.html`;
-
-      setActiveLetter(letter);
+      letterFrame.src = src;
 
       afterLayout(() => {
         updateAlphaHeight();
         scrollToStage();
       });
     }
+
+    function showLetter(letter){
+      if (!AVAILABLE_LETTERS.has(letter)){
+        toast(`Letra ${letter}: próximamente`);
+        return;
+      }
+      setActiveLetter(letter);
+      showEmbedded(`letras-spa-lite/${letter}.html`);
+    }
+
+    function showNumbers_1_10(){
+      // Números no activan alfabeto
+      setActiveLetter(null);
+      showEmbedded("1-10-A.html");
+    }
+
+    /* Sidebar: Inicio + Números */
+    document.addEventListener("click", (e) => {
+      const v = e.target.closest("[data-view]");
+      if (!v) return;
+
+      const view = v.getAttribute("data-view");
+      if (view === "home") showHome({ scroll: true });
+      if (view === "nums-1-10") showNumbers_1_10();
+    });
 
     /* =========================
        Alfabeto Mixe
@@ -794,19 +803,9 @@
       lettersWrap.appendChild(b);
     });
 
-    /* Sidebar: Inicio */
-    document.addEventListener("click", (e) => {
-      const v = e.target.closest("[data-view]");
-      if (!v) return;
-      const view = v.getAttribute("data-view");
-      if (view === "home") showHome({ scroll: true });
-    });
-
     /* =========================
        Slider (HOME)
     ========================= */
-
-    // ✅ IMPORTANTE: nombres EXACTOS (case-sensitive en GitHub Pages)
     const SLIDES = [
       { src: "FondoDicMIxe.png", caption: "Cultura Mixe de Guichicovi (arte/identidad)" },
       { src: "Ada.jpeg",         caption: "Ayuuk vivo: música, vestimenta y orgullo" },
