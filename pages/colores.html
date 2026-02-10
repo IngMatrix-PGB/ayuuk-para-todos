@@ -21,7 +21,6 @@
       --hintRedGlow: rgba(248,113,113,.22);
 
       --swBorder: rgba(255,255,255,.18);
-      --swShadow: rgba(0,0,0,.55);
     }
 
     *{ box-sizing: border-box; }
@@ -186,26 +185,8 @@
       pointer-events:none;
     }
 
-    .audio-btn{
-      flex: 0 0 auto;
-      display:inline-flex;
-      align-items:center;
-      gap: 8px;
-      padding: 9px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.35);
-      color: rgba(242,246,255,.95);
-      font-weight: 950;
-      font-size: 13px;
-      box-shadow: 0 14px 30px rgba(0,0,0,.24);
-      pointer-events: none;
-      white-space: nowrap;
-    }
-
     @media (max-width: 600px){
       .card{ padding: 16px; }
-      .audio-btn{ font-size: 14px; padding: 10px 14px; }
       .mixe{ font-size: 20px; }
       .es{ font-size: 16px; }
       .swatch{ width: 60px; height: 60px; }
@@ -366,7 +347,6 @@
         return;
       }
 
-      // si aún no existe el mp3, caemos a beep
       if (!src){
         beep(fallbackFreq, 170);
         haptic();
@@ -394,8 +374,7 @@
       await unlockAudio();
     });
 
-    // ✅ IMPORTANTE:
-    // Este HTML vive en /pages/colores.html
+    // ✅ Este HTML vive en /pages/colores.html
     // Si tus audios están en /Colores/*.mp3 en la raíz del proyecto:
     // usa "../Colores/ARCHIVO.mp3"
     const data = [
@@ -439,7 +418,6 @@
           </div>
           <div class="right">
             <div class="swatch" style="background:${item.color}"></div>
-            <div class="audio-btn">🔊 Audio</div>
           </div>
         </div>
       `;
