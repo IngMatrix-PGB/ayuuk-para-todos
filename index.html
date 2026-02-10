@@ -469,8 +469,11 @@
       .frame-wrap{ padding: 12px; }
     }
 
+    /* ✅ Mobile tighten (<=600px) */
     @media (max-width: 600px){
-      .sidebar{ padding: 10px 10px 10px; }
+      .sidebar{
+        padding: 10px 10px 10px;
+      }
       .side-title{
         font-size: 17px;
         margin: 4px 0 10px;
@@ -488,11 +491,17 @@
         font-size: 14px;
       }
 
-      .main{ padding: 10px 12px calc(var(--alphaH, 120px) + 12px); }
+      .main{
+        padding: 10px 12px calc(var(--alphaH, 120px) + 12px);
+      }
 
-      .stage{ min-height: 56vh; }
+      .stage{
+        min-height: 56vh;
+      }
 
-      .alpha{ padding: 8px 10px 10px; }
+      .alpha{
+        padding: 8px 10px 10px;
+      }
 
       .alpha .title{
         font-size: 13px;
@@ -562,8 +571,8 @@
             <span aria-hidden="true">›</span>
           </button>
 
-          <!-- ✅ AHORA NÚMEROS CARGA EN EL STAGE/IFRAME -->
-          <button class="sub-btn" type="button" data-view="nums-1-10">
+          <!-- ✅ AHORA NÚMEROS SE ABRE EN EL IFRAME DEL STAGE -->
+          <button class="sub-btn" type="button" data-view="numbers">
             <span class="sub-left">
               <span class="sub-ico" aria-hidden="true">🔢</span>
               Números
@@ -731,7 +740,6 @@
     function showHome({ scroll = true } = {}){
       frameWrap.style.display = "none";
       homeSlider.style.display = "block";
-      letterFrame.src = "about:blank";
       setActiveLetter(null);
 
       afterLayout(() => {
@@ -740,14 +748,15 @@
       });
     }
 
-    function showEmbedded(src){
+    function showEmbed(path, { activeLetter = null, scroll = true } = {}){
       homeSlider.style.display = "none";
       frameWrap.style.display = "block";
-      letterFrame.src = src;
+      letterFrame.src = path;
+      setActiveLetter(activeLetter);
 
       afterLayout(() => {
         updateAlphaHeight();
-        scrollToStage();
+        if (scroll) scrollToStage();
       });
     }
 
@@ -756,25 +765,14 @@
         toast(`Letra ${letter}: próximamente`);
         return;
       }
-      setActiveLetter(letter);
-      showEmbedded(`letras-spa-lite/${letter}.html`);
+      showEmbed(`letras-spa-lite/${letter}.html`, { activeLetter: letter, scroll: true });
     }
 
-    function showNumbers_1_10(){
-      // Números no activan alfabeto
-      setActiveLetter(null);
-      showEmbedded("1-10-A.html");
+    function showNumbers(){
+      // ✅ carga dentro del stage, igual que M
+      showEmbed(`1-10-A.html`, { activeLetter: null, scroll: true });
+      toast("Números: 1 a 10");
     }
-
-    /* Sidebar: Inicio + Números */
-    document.addEventListener("click", (e) => {
-      const v = e.target.closest("[data-view]");
-      if (!v) return;
-
-      const view = v.getAttribute("data-view");
-      if (view === "home") showHome({ scroll: true });
-      if (view === "nums-1-10") showNumbers_1_10();
-    });
 
     /* =========================
        Alfabeto Mixe
@@ -801,6 +799,16 @@
 
       b.addEventListener("click", () => showLetter(L));
       lettersWrap.appendChild(b);
+    });
+
+    /* Sidebar: Inicio / Números */
+    document.addEventListener("click", (e) => {
+      const v = e.target.closest("[data-view]");
+      if (!v) return;
+
+      const view = v.getAttribute("data-view");
+      if (view === "home") showHome({ scroll: true });
+      if (view === "numbers") showNumbers();
     });
 
     /* =========================
