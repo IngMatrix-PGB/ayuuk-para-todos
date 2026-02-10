@@ -3,187 +3,427 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Números 1–10 (Mixe)</title>
-  <style>
-    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; }
-    body { margin: 0; padding: 24px; background: #f6f7fb; }
-    h1 { margin: 0 0 12px; font-size: 22px; }
-    p.note { margin: 0 0 20px; color: #555; }
+  <title>Números 1–10 — Ayuuk para Todos</title>
 
-    .grid{
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 14px;
-      max-width: 1100px;
+  <style>
+    :root{
+      --text: rgba(242,246,255,.96);
+      --ease: cubic-bezier(.2,.85,.2,1);
+
+      --accent: rgba(37,99,235,.55);
+      --accentSoft: rgba(37,99,235,.18);
+
+      --card: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.14);
+      --muted: rgba(242,246,255,.88);
+
+      --hintRed: rgba(248,113,113,.98);
+      --hintRedGlow: rgba(248,113,113,.22);
+
+      --numRed: rgba(255,82,82,1);
+      --numShadow: rgba(0,0,0,.55);
     }
 
-    .card{
-      background: white;
+    *{ box-sizing: border-box; }
+    html, body{ height: 100%; }
+
+    body{
+      margin: 0;
+      color: var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: transparent;
+      overflow: auto;
+    }
+
+    .wrap{
+      padding: 14px;
+      padding-bottom: 140px;
+    }
+    @media (max-width: 600px){
+      .wrap{ padding-bottom: 160px; }
+    }
+
+    .panel{
       border-radius: 16px;
-      padding: 14px 14px 12px;
-      box-shadow: 0 6px 18px rgba(0,0,0,.08);
-      border: 1px solid rgba(0,0,0,.06);
+      border: 1px solid var(--border);
+      background: var(--card);
+      box-shadow: 0 14px 30px rgba(0,0,0,.28);
+      overflow:hidden;
+      display:flex;
+      flex-direction: column;
+    }
+
+    .panel-head{
+      padding: 12px 14px 10px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.22));
+      display:flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .title{
+      font-size: 16px;
+      font-weight: 1000;
+      letter-spacing: .4px;
+      margin: 0;
+    }
+
+    .hint{
+      font-size: 13px;
+      font-weight: 950;
+      color: var(--hintRed);
+      line-height: 1.2;
+      text-shadow: 0 0 18px var(--hintRedGlow);
+      margin: 0;
+    }
+
+    .panel-body{ padding: 14px; }
+
+    .nums-grid{
+      display:grid;
+      gap: 12px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: stretch;
+    }
+    @media (max-width: 720px){
+      .nums-grid{ grid-template-columns: 1fr; }
+    }
+
+    .num-card{
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      box-shadow: 0 14px 30px rgba(0,0,0,.28);
+      padding: 14px;
       cursor: pointer;
       user-select: none;
-      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-      display: grid;
-      grid-template-rows: auto 1fr auto;
-      min-height: 150px;
-      position: relative;
-      overflow: hidden;
+      transition: transform .14s var(--ease), background .14s var(--ease), border-color .14s var(--ease);
+      outline:none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .num-card:hover,
+    .num-card:focus-visible{
+      transform: translateY(-2px) scale(1.01);
+      background: var(--accentSoft);
+      border-color: var(--accent);
+    }
+
+    .left{
+      min-width: 0;
+      flex: 1 1 auto;
+      display:flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
     .mixe{
-      font-weight: 700;
-      font-size: 16px;
-      color: #111;
-      letter-spacing: .2px;
-    }
-
-    .num{
-      display: grid;
-      place-items: center;
-      font-weight: 900;
-      font-size: 64px;
-      line-height: 1;
-      color: #1f3cff;
-      margin: 6px 0;
-      transition: transform .18s ease;
+      font-weight: 1000;
+      font-size: 20px;
+      letter-spacing: .35px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .es{
-      font-size: 13px;
-      color: #444;
-      opacity: .9;
+      font-weight: 900;
+      opacity: .92;
+      color: var(--muted);
+      font-size: 15px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    /* Hover effect */
-    .card:hover{
-      transform: scale(1.06);
-      box-shadow: 0 10px 28px rgba(0,0,0,.14);
-      border-color: rgba(31,60,255,.25);
-    }
-    .card:hover .num{
-      transform: scale(1.05);
+    .right{
+      flex: 0 0 auto;
+      display:flex;
+      align-items:center;
+      gap: 10px;
     }
 
-    /* tiny badge */
-    .badge{
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 11px;
-      padding: 4px 8px;
+    .big-num{
+      width: 74px;
+      height: 74px;
+      border-radius: 16px;
+      display:grid;
+      place-items:center;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.30);
+      box-shadow: 0 14px 28px rgba(0,0,0,.26);
+      font-weight: 1100;
+      font-size: 36px;
+      color: var(--numRed);
+      text-shadow: 0 10px 22px var(--numShadow);
+    }
+
+    .audio-btn{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 9px 12px;
       border-radius: 999px;
-      background: rgba(31,60,255,.10);
-      color: #1f3cff;
-      border: 1px solid rgba(31,60,255,.18);
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.35);
+      color: rgba(242,246,255,.95);
+      font-weight: 950;
+      font-size: 13px;
+      box-shadow: 0 14px 30px rgba(0,0,0,.24);
+      pointer-events: none;
+      white-space: nowrap;
     }
 
-    /* Mobile: add active press feedback */
-    .card:active{ transform: scale(1.03); }
+    @media (max-width: 600px){
+      .num-card{ padding: 16px; }
+      .mixe{ font-size: 19px; }
+      .es{ font-size: 14px; }
+      .big-num{ width: 68px; height: 68px; font-size: 34px; }
+      .audio-btn{ font-size: 14px; padding: 10px 14px; }
+    }
+
+    .unlock{
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display:none;
+      place-items:center;
+      padding: 18px;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(10px);
+    }
+    .unlock.show{ display:grid; }
+
+    .unlock-card{
+      width: min(520px, 92vw);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(8,18,37,.82);
+      box-shadow: 0 22px 60px rgba(0,0,0,.55);
+      padding: 16px;
+      text-align:center;
+    }
+    .unlock-card h2{ margin: 6px 0 6px; font-size: 18px; font-weight: 1000; }
+    .unlock-card p{ margin: 0 0 12px; font-size: 13px; opacity: .9; line-height: 1.35; }
+    .unlock-btn{
+      width: 100%;
+      border: 1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(37,99,235,.85), rgba(37,99,235,.55));
+      color: white;
+      border-radius: 14px;
+      padding: 12px 14px;
+      cursor:pointer;
+      font-weight: 1000;
+      letter-spacing: .3px;
+      box-shadow: 0 16px 38px rgba(0,0,0,.40);
+    }
+
+    /* ✅ MODO IFRAME */
+    body.in-iframe .wrap{ padding: 0 0 160px; }
+    body.in-iframe .panel{
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      display: block;
+    }
+    body.in-iframe .panel-head{
+      border-bottom: 0;
+      background: transparent;
+      padding: 10px 14px 6px;
+    }
+    body.in-iframe .panel-body{
+      padding: 10px 14px 14px;
+    }
   </style>
 </head>
 
 <body>
-  <h1>Números 1–10 (Mixe → Español)</h1>
-  <p class="note">
-    Pasa el puntero por un número para agrandar y reproducir sonido (en móvil: toca).
-    <br>Por ahora el sonido es un “beep” generado en JS (sin audios externos).
-  </p>
+  <div class="wrap">
+    <div class="panel">
+      <div class="panel-head">
+        <h1 class="title">Números en Ayuuk (Mixe) — 1 a 10</h1>
+        <p class="hint">PC: pasa el mouse para escuchar • Móvil: toca una tarjeta para escuchar</p>
+      </div>
 
-  <div id="grid" class="grid"></div>
+      <div class="panel-body">
+        <div class="nums-grid" id="grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="unlock" id="unlock" aria-hidden="true">
+    <div class="unlock-card" role="dialog" aria-modal="true" aria-labelledby="unlockTitle">
+      <h2 id="unlockTitle">Activar audio</h2>
+      <p>Por seguridad del navegador, el audio requiere 1 toque inicial.<br/>Después podrás reproducir con solo tocar.</p>
+      <button class="unlock-btn" id="unlockBtn" type="button">✅ Tocar para activar</button>
+    </div>
+  </div>
 
   <script>
-    // ✅ Cambia aquí las palabras Mixe/Español cuando ya tengas tu dataset real.
-    // Dejo placeholder en Mixe para que puedas probar la UI.
-    const numeros = [
-      { n: 1,  mixe: "tuuk",   es: "uno" },
-      { n: 2,  mixe: "mējts'k", es: "dos" },
-      { n: 3,  mixe: "tēkēēk", es: "tres" },
-      { n: 4,  mixe: "māītaxk", es: "cuatro" },
-      { n: 5,  mixe: "mēkooxk", es: "cinco" },
-      { n: 6,  mixe: "tēduik", es: "seis" },
-      { n: 7,  mixe: "…",     es: "siete" },
-      { n: 8,  mixe: "…",     es: "ocho" },
-      { n: 9,  mixe: "…",     es: "nueve" },
-      { n: 10, mixe: "…",     es: "diez" },
+    if (window.self !== window.top) {
+      document.body.classList.add("in-iframe");
+    }
+
+    const isTouch =
+      window.matchMedia?.("(pointer: coarse)")?.matches ||
+      "ontouchstart" in window ||
+      navigator.maxTouchPoints > 0;
+
+    const unlock = document.getElementById("unlock");
+    const unlockBtn = document.getElementById("unlockBtn");
+
+    const player = new Audio();
+    player.preload = "auto";
+    let audioUnlocked = false;
+
+    function showUnlock(){
+      unlock.classList.add("show");
+      unlock.setAttribute("aria-hidden", "false");
+    }
+    function hideUnlock(){
+      unlock.classList.remove("show");
+      unlock.setAttribute("aria-hidden", "true");
+    }
+
+    async function unlockAudio(preloadSrc){
+      try{
+        if (preloadSrc) player.src = preloadSrc;
+        await player.play();
+        player.pause();
+        try{ player.currentTime = 0; }catch(e){}
+        audioUnlocked = true;
+        hideUnlock();
+      }catch(e){
+        showUnlock();
+      }
+    }
+
+    function haptic(){
+      if (isTouch && navigator.vibrate) navigator.vibrate(10);
+    }
+
+    // ✅ fallback “beep” si aún no tienes audios de números
+    let audioCtx;
+    function beep(freq=660, ms=140){
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = "sine";
+      o.frequency.value = freq;
+      o.connect(g);
+      g.connect(audioCtx.destination);
+
+      const now = audioCtx.currentTime;
+      g.gain.setValueAtTime(0.0001, now);
+      g.gain.exponentialRampToValueAtTime(0.15, now + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + ms/1000);
+
+      o.start(now);
+      o.stop(now + ms/1000);
+    }
+
+    function play(src, fallbackFreq){
+      if (isTouch && !audioUnlocked){
+        showUnlock();
+        return;
+      }
+
+      if (!src){
+        beep(fallbackFreq, 170);
+        haptic();
+        return;
+      }
+
+      const abs = new URL(src, window.location.href).href;
+      if (player.src !== abs) player.src = src;
+
+      try{ player.currentTime = 0; }catch(e){}
+      player.play().then(() => haptic()).catch(() => {
+        // si falla el audio, beep
+        beep(fallbackFreq, 170);
+        haptic();
+      });
+    }
+
+    if (isTouch) {
+      setTimeout(() => showUnlock(), 500);
+    } else {
+      audioUnlocked = true;
+    }
+
+    // 🔧 Si luego pones audios reales, solo llena "audio" con la ruta correcta.
+    // Ejemplo sugerido de estructura:
+    // ayuuk-para-todos/
+    //   Numeros/
+    //     N_1.wav ... N_10.wav
+    const data = [
+      { n:1,  mixe:"Tu'ug",    es:"Uno",   audio: null },
+      { n:2,  mixe:"Metsk",    es:"Dos",   audio: null },
+      { n:3,  mixe:"Tëgëëg",   es:"Tres",  audio: null },
+      { n:4,  mixe:"Madaaxk",  es:"Cuatro",audio: null },
+      { n:5,  mixe:"Mogooxk",  es:"Cinco", audio: null },
+      { n:6,  mixe:"Tëdujk",   es:"Seis",  audio: null },
+      { n:7,  mixe:"Juxtujk",  es:"Siete", audio: null },
+      { n:8,  mixe:"Tuktujk",  es:"Ocho",  audio: null },
+      { n:9,  mixe:"Taaxtujk", es:"Nueve", audio: null },
+      { n:10, mixe:"Majk",     es:"Diez",  audio: null },
     ];
 
-    // --- Beep engine (WebAudio) ---
-    let audioCtx;
-    function ensureAudioCtx(){
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      // iOS/Chrome: ensure running after user gesture
-      if (audioCtx.state === "suspended") audioCtx.resume();
-      return audioCtx;
-    }
+    // Preload unlock con un audio real si existe, si no, con beep no se requiere.
+    unlockBtn.addEventListener("click", async () => {
+      // Si luego agregas audio real al #1, cambia esto a esa ruta.
+      // await unlockAudio("../Numeros/N_1.wav");
+      // Por ahora: intentamos "desbloquear" con un play vacío -> muestra unlock si el navegador lo pide
+      await unlockAudio();
+    });
 
-    // Beep configurable per number (solo para ver que funciona)
-    function beepForNumber(num){
-      const ctx = ensureAudioCtx();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-
-      // frecuencia distinta por número (1..10)
-      const base = 220; // A3
-      const freq = base * (1 + (num-1) * 0.06);
-
-      osc.type = "sine";
-      osc.frequency.value = freq;
-
-      // Envelope para que no truene
-      const now = ctx.currentTime;
-      gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(0.2, now + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
-
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
-      osc.start(now);
-      osc.stop(now + 0.25);
-    }
-
-    // --- Render UI ---
     const grid = document.getElementById("grid");
-    let lastPlayedAt = 0;
 
-    function createCard(item){
+    for (const item of data){
       const card = document.createElement("div");
-      card.className = "card";
+      card.className = "num-card";
+      card.tabIndex = 0;
+
+      // Si pones audio real, cambia a:
+      // card.dataset.audio = item.audio;
+      // y en play() se usará.
+      if (item.audio) card.dataset.audio = item.audio;
+
       card.innerHTML = `
-        <div class="badge">hover / tap</div>
-        <div class="mixe">${escapeHtml(item.mixe)}</div>
-        <div class="num">${item.n}</div>
-        <div class="es">${escapeHtml(item.es)}</div>
+        <div class="left">
+          <div class="mixe">${item.mixe}</div>
+          <div class="es">${item.es}</div>
+        </div>
+        <div class="right">
+          <div class="big-num">${item.n}</div>
+          <div class="audio-btn">🔊 Audio</div>
+        </div>
       `;
 
-      // ✅ Hover: play beep (throttle para que no se repita 1000 veces al mover el mouse)
-      card.addEventListener("mouseenter", () => {
-        const now = Date.now();
-        if (now - lastPlayedAt > 180) {
-          lastPlayedAt = now;
-          beepForNumber(item.n);
-        }
-      });
+      const src = item.audio ? item.audio : null;
+      const freq = 520 + item.n * 28;
 
-      // ✅ Mobile + desktop click
-      card.addEventListener("click", () => beepForNumber(item.n));
+      if (isTouch){
+        card.addEventListener("pointerdown", () => play(src, freq), { passive: true });
+        card.addEventListener("click", () => play(src, freq));
+      } else {
+        card.addEventListener("pointerenter", () => play(src, freq));
+        card.addEventListener("focus", () => play(src, freq));
+        card.addEventListener("click", () => play(src, freq));
+      }
 
-      return card;
+      grid.appendChild(card);
     }
-
-    function escapeHtml(str){
-      return String(str)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-
-    numeros.forEach(x => grid.appendChild(createCard(x)));
   </script>
 </body>
 </html>
