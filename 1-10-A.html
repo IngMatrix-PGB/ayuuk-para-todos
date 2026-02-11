@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Números 1–10 — Ayuuk para Todos</title>
+  <title>Números 1–20 — Ayuuk para Todos</title>
 
   <style>
     :root{
@@ -225,7 +225,7 @@
       box-shadow: 0 16px 38px rgba(0,0,0,.40);
     }
 
-    /* ✅ MODO IFRAME (igual que M) */
+    /* ✅ MODO IFRAME */
     body.in-iframe .wrap{ padding: 0 0 160px; }
     body.in-iframe .panel{
       border: 0;
@@ -249,7 +249,7 @@
   <div class="wrap">
     <div class="panel">
       <div class="panel-head">
-        <div class="title">Números en Ayuuk (Mixe) — 1 a 10</div>
+        <div class="title">Números en Ayuuk (Mixe) — 1 a 20</div>
         <div class="hint">PC: pasa el mouse para escuchar audio • Móvil: toca una tarjeta para escuchar</div>
       </div>
 
@@ -301,7 +301,7 @@
       if (isTouch && navigator.vibrate) navigator.vibrate(10);
     }
 
-    // WebAudio para desbloquear en móvil
+    // WebAudio fallback
     let audioCtx;
     function ensureAudioContext(){
       const Ctx = window.AudioContext || window.webkitAudioContext;
@@ -375,18 +375,29 @@
       await unlockAudio();
     });
 
-    // ✅ Ya con audios reales en /ayuuk-para-todos/Numeros/
+    // ✅ Números 1–20 (audios: Numeros/1.mp3 ... Numeros/20.mp3)
     const data = [
-      { n:1,  mixe:"Tu'ug",    es:"Uno",    audio: "Numeros/1.mp3"  },
-      { n:2,  mixe:"Metsk",    es:"Dos",    audio: "Numeros/2.mp3"  },
-      { n:3,  mixe:"Tëgëëg",   es:"Tres",   audio: "Numeros/3.mp3"  },
-      { n:4,  mixe:"Madaaxk",  es:"Cuatro", audio: "Numeros/4.mp3"  },
-      { n:5,  mixe:"Mogooxk",  es:"Cinco",  audio: "Numeros/5.mp3"  },
-      { n:6,  mixe:"Tëdujk",   es:"Seis",   audio: "Numeros/6.mp3"  },
-      { n:7,  mixe:"Juxtujk",  es:"Siete",  audio: "Numeros/7.mp3"  },
-      { n:8,  mixe:"Tuktujk",  es:"Ocho",   audio: "Numeros/8.mp3"  },
-      { n:9,  mixe:"Taaxtujk", es:"Nueve",  audio: "Numeros/9.mp3"  },
-      { n:10, mixe:"Majk",     es:"Diez",   audio: "Numeros/10.mp3" },
+      { n:1,  mixe:"Tu’ug",            es:"Uno",         audio:"Numeros/1.mp3"  },
+      { n:2,  mixe:"Metsk",            es:"Dos",         audio:"Numeros/2.mp3"  },
+      { n:3,  mixe:"Tëgëëg",           es:"Tres",        audio:"Numeros/3.mp3"  },
+      { n:4,  mixe:"Madaaxk",          es:"Cuatro",      audio:"Numeros/4.mp3"  },
+      { n:5,  mixe:"Mogooxk",          es:"Cinco",       audio:"Numeros/5.mp3"  },
+      { n:6,  mixe:"Tëdujk",           es:"Seis",        audio:"Numeros/6.mp3"  },
+      { n:7,  mixe:"Juxtujk",          es:"Siete",       audio:"Numeros/7.mp3"  },
+      { n:8,  mixe:"Tuktujk",          es:"Ocho",        audio:"Numeros/8.mp3"  },
+      { n:9,  mixe:"Taaxtujk",         es:"Nueve",       audio:"Numeros/9.mp3"  },
+      { n:10, mixe:"Majk",             es:"Diez",        audio:"Numeros/10.mp3" },
+
+      { n:11, mixe:"Majtu’ug",         es:"Once",        audio:"Numeros/11.mp3" },
+      { n:12, mixe:"Majmetsk",         es:"Doce",        audio:"Numeros/12.mp3" },
+      { n:13, mixe:"Majtëgëëg",        es:"Trece",       audio:"Numeros/13.mp3" },
+      { n:14, mixe:"Majmakts",         es:"Catorce",     audio:"Numeros/14.mp3" },
+      { n:15, mixe:"Majmokx",          es:"Quince",      audio:"Numeros/15.mp3" },
+      { n:16, mixe:"Majmokx tu’ug",    es:"Dieciséis",   audio:"Numeros/16.mp3" },
+      { n:17, mixe:"Majmokx metsk",    es:"Diecisiete",  audio:"Numeros/17.mp3" },
+      { n:18, mixe:"Majmokx tëgëëg",   es:"Dieciocho",   audio:"Numeros/18.mp3" },
+      { n:19, mixe:"Majmokx madaaxk",  es:"Diecinueve",  audio:"Numeros/19.mp3" },
+      { n:20, mixe:"Ii’x",             es:"Veinte",      audio:"Numeros/20.mp3" },
     ];
 
     const grid = document.getElementById("grid");
@@ -409,7 +420,7 @@
       `;
 
       const src = item.audio;
-      const freq = 520 + item.n * 28;
+      const freq = 520 + item.n * 22;
 
       if (isTouch){
         card.addEventListener("pointerdown", () => play(src, freq), { passive: true });
