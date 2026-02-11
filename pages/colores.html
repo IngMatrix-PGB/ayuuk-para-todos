@@ -374,37 +374,32 @@
       await unlockAudio();
     });
 
-    // ✅ Este HTML vive en /pages/colores.html
-    // Audios en /Colores/*.mp3 (ruta relativa desde /pages):
-    // "../Colores/<archivo>.mp3"
-    //
-    // NOTA: dijiste que falta 1 audio: dejé "Grisáceo" sin audio (null) para que no truene.
-    // Cuando lo tengas, solo pon: audio:"../Colores/<tu-archivo>.mp3"
+    // ✅ /pages/colores.html  -> audios en  /Colores/
+    // Ruta desde /pages: "../Colores/<archivo>"
     const data = [
-      { mixe:"JINY",       es:"Negro",                       color:"#0b0b0b", audio:"../Colores/negro.mp3" },
-      { mixe:"POOB",       es:"Blanco",                      color:"#f3f4f6", audio:"../Colores/blanco.mp3" },
-      { mixe:"TSAPTS",     es:"Rojo",                        color:"#ef4444", audio:"../Colores/rojo.mp3" },
-      { mixe:"TSUXK",      es:"Verde",                       color:"#2e7d32", audio:"../Colores/verde.mp3" },
-      { mixe:"PU’TS",      es:"Amarillo",                    color:"#facc15", audio:"../Colores/amarillo.mp3" },
-      { mixe:"UKY",        es:"Azul",                        color:"#2563eb", audio:"../Colores/azul.mp3" },
+      { mixe:"JINY",       es:"Negro",                       color:"#0b0b0b", audio:"../Colores/JINY.m4a.mp4" },
+      { mixe:"POOB",       es:"Blanco",                      color:"#f3f4f6", audio:"../Colores/POOB.m4a.mp4" },
+      { mixe:"TSAPTS",     es:"Rojo",                        color:"#ef4444", audio:"../Colores/TSAPTS.m4a.mp4" },
+      { mixe:"TSUXK",      es:"Verde",                       color:"#2e7d32", audio:"../Colores/TSUXK.m4a.mp4" },
+      { mixe:"PU’TS",      es:"Amarillo",                    color:"#facc15", audio:"../Colores/PU’TS.m4a.mp4" },
+      { mixe:"UKY",        es:"Azul",                        color:"#2563eb", audio:"../Colores/UKY.m4a.mp4" },
+      { mixe:"OBYU’TS",    es:"Naranja",                     color:"#fb923c", audio:"../Colores/OBYU’TS.m4a.mp4" },
 
-      { mixe:"OBYU’TS",    es:"Naranja",                     color:"#fb923c", audio:null },
+      { mixe:"KAMBIIDY",   es:"Morado (lila / vino)",        color:"#7c3aed", audio:"../Colores/KAMBIIDY.m4a.mp4" },
+      { mixe:"TSIXY",      es:"Beige (arena / paja)",        color:"#d6c4a3", audio:"../Colores/TSIXY.m4a.mp4" },
+      { mixe:"PU’DY",      es:"Crema (blanco con beige)",    color:"#eadfc8", audio:"../Colores/PU’DY.m4a.mp4" },
 
-      { mixe:"KAMBIIDY",   es:"Morado (lila / vino)",        color:"#7c3aed", audio:"../Colores/morado.mp3" },
-      { mixe:"TSIXY",      es:"Beige (arena / paja)",        color:"#d6c4a3", audio:"../Colores/beige.mp3" },
-      { mixe:"PU’DY",      es:"Crema (blanco con beige)",    color:"#eadfc8", audio:"../Colores/blanco-con-beige.mp3" },
+      { mixe:"JAAMDSUXK",  es:"Verde limón",                 color:"#a3e635", audio:"../Colores/JAAMDSUXK.m4a.mp4" },
+      { mixe:"JAAMBU’TS",  es:"Amarillo claro",              color:"#fde68a", audio:"../Colores/JAAMBU’TS.m4a.mp4" },
 
-      { mixe:"JAAMDSUXK",  es:"Verde limón",                 color:"#a3e635", audio:"../Colores/verde-limon.mp3" },
-      { mixe:"JAAMBU’TS",  es:"Amarillo claro",              color:"#fde68a", audio:"../Colores/amarillo-claro.mp3" },
+      { mixe:"KATS",       es:"Jaspeado",                    color:"#9ca3af", audio:"../Colores/KATS.m4a.mp4" },
+      { mixe:"XAAG",       es:"Rayado",                      color:"#93c5fd", audio:"../Colores/XAAG.m4a.mp4" },
 
-      { mixe:"KATS",       es:"Jaspeado",                    color:"#9ca3af", audio:"../Colores/jaspeado.mp3" },
-      { mixe:"XAAG",       es:"Rayado",                      color:"#93c5fd", audio:"../Colores/rayado.mp3" },
-
-      { mixe:"NA’ATSAPTS", es:"Rojizo",                      color:"#c24141", audio:"../Colores/rojizo.mp3" },
-      { mixe:"NA’AUKY",    es:"Azulado",                     color:"#5b7cdb", audio:"../Colores/azulado.mp3" },
-      { mixe:"NA’APU’TS",  es:"Amarillento",                 color:"#f2d35c", audio:"../Colores/amarillento.mp3" },
-      { mixe:"NA’ATSUXK",  es:"Verdoso",                     color:"#4d7c5a", audio:"../Colores/verdoso.mp3" },
-      { mixe:"NA’AJAAM",   es:"Grisáceo",                    color:"#9aa3ad", audio:"../Colores/grisaceo.mp3" },
+      { mixe:"NA’ATSAPTS", es:"Rojizo",                      color:"#c24141", audio:"../Colores/NA’ATSAPTS.m4a.mp4" },
+      { mixe:"NA’AUKY",    es:"Azulado",                     color:"#5b7cdb", audio:"../Colores/NA’AUKY.m4a.mp4" },
+      { mixe:"NA’APU’TS",  es:"Amarillento",                 color:"#f2d35c", audio:"../Colores/NA’APU’TS.m4a.mp4" },
+      { mixe:"NA’ATSUXK",  es:"Verdoso",                     color:"#4d7c5a", audio:"../Colores/NA’ATSUXK.m4a.mp4" },
+      { mixe:"NA’AJAAM",   es:"Grisáceo",                    color:"#9aa3ad", audio:"../Colores/NA’AJAAM.m4a.mp4" },
     ];
 
     const grid = document.getElementById("grid");
