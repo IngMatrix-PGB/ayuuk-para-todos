@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Letra M — Diccionario Ayuuk</title>
+
+  <style>
+    :root{
+      --text: rgba(242,246,255,.96);
+      --ease: cubic-bezier(.2,.85,.2,1);
+
+      --accent: rgba(37,99,235,.55);
+      --accentSoft: rgba(37,99,235,.18);
+
+      --card: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.14);
+      --muted: rgba(242,246,255,.88);
+
+      --hintRed: rgba(248,113,113,.98);
+      --hintRedGlow: rgba(248,113,113,.22);
+    }
+
+    *{ box-sizing: border-box; }
+    html, body{ height: 100%; }
+
+    body{
+      margin: 0;
+      color: var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: transparent;
+      overflow: auto;
+    }
+
+    .wrap{
+      padding: 14px;
+      padding-bottom: 140px;
+    }
+
+    @media (max-width: 600px){
+      .wrap{ padding-bottom: 160px; }
+    }
+
+    .panel{
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      box-shadow: 0 14px 30px rgba(0,0,0,.28);
+      overflow:hidden;
+      display:flex;
+      flex-direction: column;
+    }
+
+    .panel-head{
+      padding: 12px 14px 10px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.22));
+      display:flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hint{
+      font-size: 14px;
+      font-weight: 950;
+      color: var(--hintRed);
+      text-align: center;
+      line-height: 1.15;
+      white-space: nowrap;
+      text-shadow: 0 0 18px var(--hintRedGlow);
+    }
+
+    @media (max-width: 720px){
+      .hint{
+        font-size: 12.5px;
+        white-space: normal;
+      }
+    }
+
+    .panel-body{ padding: 14px; }
+
+    .words-grid{
+      display:grid;
+      gap: 12px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: stretch;
+    }
+    @media (max-width: 720px){
+      .words-grid{ grid-template-columns: 1fr; }
+    }
+
+    .word-card{
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      box-shadow: 0 14px 30px rgba(0,0,0,.28);
+      padding: 14px 14px;
+      cursor: pointer;
+      user-select: none;
+      transition: transform .14s var(--ease), background .14s var(--ease), border-color .14s var(--ease);
+      outline:none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    .word-card:hover,
+    .word-card:focus-visible{
+      transform: translateY(-2px) scale(1.01);
+      background: var(--accentSoft);
+      border-color: var(--accent);
+    }
+
+    .row{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .pair{
+      display:flex;
+      align-items: baseline;
+      gap: 12px;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    .mixe, .es{
+      font-size: 22px;
+      line-height: 1.1;
+      letter-spacing: .4px;
+      white-space: nowrap;
+    }
+    .mixe{ font-weight: 1000; }
+    .es{
+      font-weight: 900;
+      opacity: .92;
+      color: var(--muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    @media (max-width: 600px){
+      .word-card{ padding: 16px; }
+      .mixe, .es{ font-size: 20px; }
+    }
+
+    .unlock{
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display:none;
+      place-items:center;
+      padding: 18px;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(10px);
+    }
+    .unlock.show{ display:grid; }
+
+    .unlock-card{
+      width: min(520px, 92vw);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(8,18,37,.82);
+      box-shadow: 0 22px 60px rgba(0,0,0,.55);
+      padding: 16px;
+      text-align:center;
+    }
+    .unlock-card h2{ margin: 6px 0 6px; font-size: 18px; font-weight: 1000; }
+    .unlock-card p{ margin: 0 0 12px; font-size: 13px; opacity: .9; line-height: 1.35; }
+    .unlock-btn{
+      width: 100%;
+      border: 1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(37,99,235,.85), rgba(37,99,235,.55));
+      color: white;
+      border-radius: 14px;
+      padding: 12px 14px;
+      cursor:pointer;
+      font-weight: 1000;
+      letter-spacing: .3px;
+      box-shadow: 0 16px 38px rgba(0,0,0,.40);
+    }
+
+    /* ✅ MODO IFRAME */
+    body.in-iframe .wrap{ padding: 0 0 160px; }
+
+    body.in-iframe .panel{
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      display: block;
+    }
+
+    body.in-iframe .panel-head{
+      border-bottom: 0;
+      background: transparent;
+      padding: 10px 14px 6px;
+    }
+
+    body.in-iframe .panel-body{
+      padding: 10px 14px 14px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="panel">
+      <div class="panel-head">
+        <div class="hint">PC: pasa el mouse para escuchar audio • Móvil: toca una tarjeta para escuchar</div>
+      </div>
+
+      <div class="panel-body">
+        <div class="words-grid">
+
+<div class="word-card" tabindex="0" data-audio="../Letra-A/1.mp3"><div class="row"><div class="pair"><div class="mixe">AAMY</div><div class="es">Hace rato</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/2.mp3"><div class="row"><div class="pair"><div class="mixe">AAPK</div><div class="es">Sombra</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/3.mp3"><div class="row"><div class="pair"><div class="mixe">AAT</div><div class="es">Piojo</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/4.mp3"><div class="row"><div class="pair"><div class="mixe">AATS</div><div class="es">Bejuco</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/5.mp3"><div class="row"><div class="pair"><div class="mixe">AAW</div><div class="es">Boca</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/6.mp3"><div class="row"><div class="pair"><div class="mixe">AAY</div><div class="es">Hoja de árbol o planta</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/7.mp3"><div class="row"><div class="pair"><div class="mixe">AIX</div><div class="es">Espera</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/8.mp3"><div class="row"><div class="pair"><div class="mixe">AIXËËY</div><div class="es">Calculado</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/9.mp3"><div class="row"><div class="pair"><div class="mixe">AJ</div><div class="es">Cedro</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/10.mp3"><div class="row"><div class="pair"><div class="mixe">AJAAX</div><div class="es">Pasar la mano</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/11.mp3"><div class="row"><div class="pair"><div class="mixe">AJAXTU’UT</div><div class="es">Quitar algo</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/12.mp3"><div class="row"><div class="pair"><div class="mixe">AJËËXK</div><div class="es">Por fuera</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/13.mp3"><div class="row"><div class="pair"><div class="mixe">AJËJP</div><div class="es">Pujando</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/14.mp3"><div class="row"><div class="pair"><div class="mixe">AJETEEDËW</div><div class="es">Partir una cosa</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/15.mp3"><div class="row"><div class="pair"><div class="mixe">AJIITS</div><div class="es">Tapar algo</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/16.mp3"><div class="row"><div class="pair"><div class="mixe">AJIITSY</div><div class="es">Cerrado</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/17.mp3"><div class="row"><div class="pair"><div class="mixe">AJOJP</div><div class="es">Evaporando</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/18.mp3"><div class="row"><div class="pair"><div class="mixe">AJOKXËËW</div><div class="es">Recalentar</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/19.mp3"><div class="row"><div class="pair"><div class="mixe">AJOT</div><div class="es">Herida en la boca</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/20.mp3"><div class="row"><div class="pair"><div class="mixe">AJTSY</div><div class="es">Hermano mayor</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/21.mp3"><div class="row"><div class="pair"><div class="mixe">AJUP</div><div class="es">Tápalo</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/22.mp3"><div class="row"><div class="pair"><div class="mixe">AJUUPYË</div><div class="es">Compra, venta, comerciante</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/23.mp3"><div class="row"><div class="pair"><div class="mixe">AK</div><div class="es">Piel, corteza</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/24.mp3"><div class="row"><div class="pair"><div class="mixe">AKAP</div><div class="es">Tapar con palos</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/25.mp3"><div class="row"><div class="pair"><div class="mixe">AKAPX</div><div class="es">Persona platicadora</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/26.mp3"><div class="row"><div class="pair"><div class="mixe">AKATAA</div><div class="es">Solo este</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/27.mp3"><div class="row"><div class="pair"><div class="mixe">AKATS</div><div class="es">Mestizo</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/28.mp3"><div class="row"><div class="pair"><div class="mixe">AKËËW</div><div class="es">Cerrar puerta, ventana o recipiente</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/29.mp3"><div class="row"><div class="pair"><div class="mixe">AKËY</div><div class="es">Cerrado</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/30.mp3"><div class="row"><div class="pair"><div class="mixe">AKON</div><div class="es">Cosa corta</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/31.mp3"><div class="row"><div class="pair"><div class="mixe">AKONY</div><div class="es">Hijo natural</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/32.mp3"><div class="row"><div class="pair"><div class="mixe">AKOOTS</div><div class="es">A oscuras</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/33.mp3"><div class="row"><div class="pair"><div class="mixe">AKTS</div><div class="es">Totomosle</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/34.mp3"><div class="row"><div class="pair"><div class="mixe">AKUJK</div><div class="es">En el municipio</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/35.mp3"><div class="row"><div class="pair"><div class="mixe">AKUJPËJP</div><div class="es">Casamiento civil</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/36.mp3"><div class="row"><div class="pair"><div class="mixe">AKUJTËJP</div><div class="es">Casa municipal</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/37.mp3"><div class="row"><div class="pair"><div class="mixe">AKUPAJP</div><div class="es">De memoria</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/38.mp3"><div class="row"><div class="pair"><div class="mixe">AKUTË’ËTS</div><div class="es">Sin tomar agua, a secas</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/39.mp3"><div class="row"><div class="pair"><div class="mixe">AKX</div><div class="es">Pescado</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/40.mp3"><div class="row"><div class="pair"><div class="mixe">AKXA</div><div class="es">Chayote</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/41.mp3"><div class="row"><div class="pair"><div class="mixe">AMAAPY</div><div class="es">Imitar</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/42.mp3"><div class="row"><div class="pair"><div class="mixe">AMAAT</div><div class="es">Con enojo</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/43.mp3"><div class="row"><div class="pair"><div class="mixe">AMAATSY</div><div class="es">Mejilla</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/44.mp3"><div class="row"><div class="pair"><div class="mixe">AMAAY</div><div class="es">Delicado</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/45.mp3"><div class="row"><div class="pair"><div class="mixe">AMAY</div><div class="es">Bastante, montón</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/46.mp3"><div class="row"><div class="pair"><div class="mixe">AMAYEEPY</div><div class="es">Escandaliza</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/47.mp3"><div class="row"><div class="pair"><div class="mixe">AMËJ</div><div class="es">Viejo, gente adulta</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/48.mp3"><div class="row"><div class="pair"><div class="mixe">AMEJTSTAAKP</div><div class="es">Posada</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/49.mp3"><div class="row"><div class="pair"><div class="mixe">AMETSK</div><div class="es">En pareja, de dos en dos</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/50.mp3"><div class="row"><div class="pair"><div class="mixe">AMETSY</div><div class="es">En silencio</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/51.mp3"><div class="row"><div class="pair"><div class="mixe">AMËXAN</div><div class="es">Castellanizado</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/52.mp3"><div class="row"><div class="pair"><div class="mixe">AMKAAKY</div><div class="es">Tortilla caliente</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/53.mp3"><div class="row"><div class="pair"><div class="mixe">AMON</div><div class="es">Cállate</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/54.mp3"><div class="row"><div class="pair"><div class="mixe">AMOONTSËËPY</div><div class="es">Se hace lodoso</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/55.mp3"><div class="row"><div class="pair"><div class="mixe">AMOTS</div><div class="es">Envolver</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/56.mp3"><div class="row"><div class="pair"><div class="mixe">AMUKIËJAAY</div><div class="es">Borracho</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/57.mp3"><div class="row"><div class="pair"><div class="mixe">AMUTSK</div><div class="es">Celoso</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/58.mp3"><div class="row"><div class="pair"><div class="mixe">AMUUKYË</div><div class="es">Andar borracho</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/59.mp3"><div class="row"><div class="pair"><div class="mixe">AMUUM</div><div class="es">Entero</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/60.mp3"><div class="row"><div class="pair"><div class="mixe">AMUUTSY</div><div class="es">Cucaracha</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/61.mp3"><div class="row"><div class="pair"><div class="mixe">AN</div><div class="es">Caliente</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/62.mp3"><div class="row"><div class="pair"><div class="mixe">ANA’JTY</div><div class="es">Zurdo</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/63.mp3"><div class="row"><div class="pair"><div class="mixe">ANAXY</div><div class="es">Colado</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/64.mp3"><div class="row"><div class="pair"><div class="mixe">ANËË</div><div class="es">Baba, mentiroso</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/65.mp3"><div class="row"><div class="pair"><div class="mixe">ANEE</div><div class="es">Trueno</div></div></div></div>
+
+<div class="word-card" tabindex="0" data-audio="../Letra-A/68.mp3"><div class="row"><div class="pair"><div class="mixe">ANE’EK</div><div class="es">Doblar ropa</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/69.mp3"><div class="row"><div class="pair"><div class="mixe">ANEEM</div><div class="es">Encargar, ordenar</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/70.mp3"><div class="row"><div class="pair"><div class="mixe">ANEY</div><div class="es">Chueco</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/71.mp3"><div class="row"><div class="pair"><div class="mixe">ANIIY</div><div class="es">Gusta de comer chile</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/72.mp3"><div class="row"><div class="pair"><div class="mixe">ANNËË</div><div class="es">Agua caliente</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/73.mp3"><div class="row"><div class="pair"><div class="mixe">ANO’KËPËTSY</div><div class="es">Tengo calor</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/74.mp3"><div class="row"><div class="pair"><div class="mixe">ANPËKP</div><div class="es">Hace calor</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/75.mp3"><div class="row"><div class="pair"><div class="mixe">ANTSAA</div><div class="es">Piedra caliente</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/76.mp3"><div class="row"><div class="pair"><div class="mixe">ANUKX</div><div class="es">Prestado</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/77.mp3"><div class="row"><div class="pair"><div class="mixe">ANU’XËËPY</div><div class="es">Cansado</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/78.mp3"><div class="row"><div class="pair"><div class="mixe">ANU’XP</div><div class="es">Pide prestado</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/79.mp3"><div class="row"><div class="pair"><div class="mixe">AOJTSP</div><div class="es">Se dobla</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/80.mp3"><div class="row"><div class="pair"><div class="mixe">AOOTSY</div><div class="es">Sellado</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/81.mp3"><div class="row"><div class="pair"><div class="mixe">AOY</div><div class="es">A la buena</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/82.mp3"><div class="row"><div class="pair"><div class="mixe">AP</div><div class="es">Anciano, viejo o abuelo</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/83.mp3"><div class="row"><div class="pair"><div class="mixe">APAAM</div><div class="es">Trabajar enfermo</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/84.mp3"><div class="row"><div class="pair"><div class="mixe">APAJK</div><div class="es">Quijada</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/85.mp3"><div class="row"><div class="pair"><div class="mixe">APAK</div><div class="es">No hay nadie</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/86.mp3"><div class="row"><div class="pair"><div class="mixe">APAX</div><div class="es">Cerrar con tira de madera</div></div></div></div>
+
+<div class="word-card" tabindex="0" data-audio="../Letra-A/89.mp3"><div class="row"><div class="pair"><div class="mixe">APEJT</div><div class="es">Se concluyó</div></div></div></div>
+
+<div class="word-card" tabindex="0" data-audio="../Letra-A/91.mp3"><div class="row"><div class="pair"><div class="mixe">APËK</div><div class="es">Apréndelo</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/92.mp3"><div class="row"><div class="pair"><div class="mixe">APËKËËW</div><div class="es">Servir la comida</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/93.mp3"><div class="row"><div class="pair"><div class="mixe">APITY</div><div class="es">Manojos</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/94.mp3"><div class="row"><div class="pair"><div class="mixe">APOO</div><div class="es">Barba canosa</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/95.mp3"><div class="row"><div class="pair"><div class="mixe">APTEETY</div><div class="es">Abuelo</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/96.mp3"><div class="row"><div class="pair"><div class="mixe">APTEJK</div><div class="es">Antepasados</div></div></div></div>
+
+<div class="word-card" tabindex="0" data-audio="../Letra-A/99.mp3"><div class="row"><div class="pair"><div class="mixe">APU’TS</div><div class="es">De pico amarillo</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/100.mp3"><div class="row"><div class="pair"><div class="mixe">APUUTS</div><div class="es">Granos en la boca</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/97.mp3"><div class="row"><div class="pair"><div class="mixe">APTY</div><div class="es">Espina</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/98.mp3"><div class="row"><div class="pair"><div class="mixe">APTYKAA</div><div class="es">Puerco espín</div></div></div></div>
+
+<div class="word-card" tabindex="0" data-audio="../Letra-A/101.mp3"><div class="row"><div class="pair"><div class="mixe">APUX</div><div class="es">Abrir camino con machete</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/102.mp3"><div class="row"><div class="pair"><div class="mixe">APUXËËW</div><div class="es">Hacer pedazos con machete</div></div></div></div>
+
+<div class="word-card" tabindex="0" data-audio="../Letra-A/104.mp3"><div class="row"><div class="pair"><div class="mixe">ATA</div><div class="es">Este</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/105.mp3"><div class="row"><div class="pair"><div class="mixe">ATAAK</div><div class="es">Vete</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/106.mp3"><div class="row"><div class="pair"><div class="mixe">ATAAKAMP</div><div class="es">Se irá</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/107.mp3"><div class="row"><div class="pair"><div class="mixe">ATAJP</div><div class="es">Alineado, escarbado</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/108.mp3"><div class="row"><div class="pair"><div class="mixe">ATAK</div><div class="es">Sin barba</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/109.mp3"><div class="row"><div class="pair"><div class="mixe">ATAKAMPËTSY</div><div class="es">Me iré</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/110.mp3"><div class="row"><div class="pair"><div class="mixe">ATEEM</div><div class="es">Labios</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/111.mp3"><div class="row"><div class="pair"><div class="mixe">ATMSOO</div><div class="es">Por su propia voluntad</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/112.mp3"><div class="row"><div class="pair"><div class="mixe">ATOOM</div><div class="es">Que duele</div></div></div></div>
+
+<div class="word-card" tabindex="0" data-audio="../Letra-A/116.mp3"><div class="row"><div class="pair"><div class="mixe">ATSAP’TS</div><div class="es">Boca roja</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/114.mp3"><div class="row"><div class="pair"><div class="mixe">ATSAAM</div><div class="es">Boca gorda</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/115.mp3"><div class="row"><div class="pair"><div class="mixe">ATSAATSY</div><div class="es">Apenas</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/117.mp3"><div class="row"><div class="pair"><div class="mixe">ATSËM</div><div class="es">Marrano</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/118.mp3"><div class="row"><div class="pair"><div class="mixe">ATSËNAPIË</div><div class="es">Avecindado</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/121.mp3"><div class="row"><div class="pair"><div class="mixe">ATSIP</div><div class="es">Por la fuerza</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/122.mp3"><div class="row"><div class="pair"><div class="mixe">ATSIPAMAAT</div><div class="es">Violentamente</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/119.mp3"><div class="row"><div class="pair"><div class="mixe">ATSIITSY</div><div class="es">Tapado</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/123.mp3"><div class="row"><div class="pair"><div class="mixe">ATSOJKP</div><div class="es">Ambicioso</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/124.mp3"><div class="row"><div class="pair"><div class="mixe">ATSOW</div><div class="es">Contesta</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/125.mp3"><div class="row"><div class="pair"><div class="mixe">ATSYUUT</div><div class="es">Achiote</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/126.mp3"><div class="row"><div class="pair"><div class="mixe">ATUK</div><div class="es">Sin diente</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/127.mp3"><div class="row"><div class="pair"><div class="mixe">ATUKY</div><div class="es">Cerrado</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/128.mp3"><div class="row"><div class="pair"><div class="mixe">ATU’UKATY</div><div class="es">Uno por uno</div></div></div></div>
+
+<div class="word-card" tabindex="0" data-audio="../Letra-A/130.mp3"><div class="row"><div class="pair"><div class="mixe">AWA’AN</div><div class="es">Bravo</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/133.mp3"><div class="row"><div class="pair"><div class="mixe">AWA’ATS</div><div class="es">Abierto</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/134.mp3"><div class="row"><div class="pair"><div class="mixe">AWAAY</div><div class="es">Babea</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/132.mp3"><div class="row"><div class="pair"><div class="mixe">AWAATS</div><div class="es">Llave / Se abrió</div></div></div></div>
+
+<div class="word-card" tabindex="0" data-audio="../Letra-A/138.mp3"><div class="row"><div class="pair"><div class="mixe">AWEENËË’PY</div><div class="es">Disminuyendo</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/139.mp3"><div class="row"><div class="pair"><div class="mixe">AWEENËËY</div><div class="es">Ofrecido</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/140.mp3"><div class="row"><div class="pair"><div class="mixe">AWËËNY</div><div class="es">Amarrado</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/142.mp3"><div class="row"><div class="pair"><div class="mixe">AWIIM</div><div class="es">Del otro lado</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/143.mp3"><div class="row"><div class="pair"><div class="mixe">AWIINK</div><div class="es">Aparte</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/145.mp3"><div class="row"><div class="pair"><div class="mixe">AWOKËËW</div><div class="es">Echar algo con la mano</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/146.mp3"><div class="row"><div class="pair"><div class="mixe">AXAAM</div><div class="es">Atrás</div></div></div></div>
+
+<div class="word-card" tabindex="0" data-audio="../Letra-A/148.mp3"><div class="row"><div class="pair"><div class="mixe">AXAJTUK</div><div class="es">Atajar</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/149.mp3"><div class="row"><div class="pair"><div class="mixe">AXËËK</div><div class="es">Mala, sucia</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/150.mp3"><div class="row"><div class="pair"><div class="mixe">AXËËY</div><div class="es">Ayer</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/151.mp3"><div class="row"><div class="pair"><div class="mixe">AXIIK</div><div class="es">Risueño</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/164.mp3"><div class="row"><div class="pair"><div class="mixe">AXIIP</div><div class="es">Irrita la boca</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/152.mp3"><div class="row"><div class="pair"><div class="mixe">AXKAATS</div><div class="es">Tíralo</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/153.mp3"><div class="row"><div class="pair"><div class="mixe">AXKAKAK</div><div class="es">Pájaro</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/154.mp3"><div class="row"><div class="pair"><div class="mixe">AXMATS</div><div class="es">Suéltalo</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/155.mp3"><div class="row"><div class="pair"><div class="mixe">AXPAJK</div><div class="es">Nalga</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/156.mp3"><div class="row"><div class="pair"><div class="mixe">AXPËKY</div><div class="es">Educado</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/158.mp3"><div class="row"><div class="pair"><div class="mixe">AXTAAW</div><div class="es">Buscarlo</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/157.mp3"><div class="row"><div class="pair"><div class="mixe">AXTAAMËTS</div><div class="es">Por ejemplo</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/159.mp3"><div class="row"><div class="pair"><div class="mixe">AXTSAATSY</div><div class="es">Sufrimiento</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/160.mp3"><div class="row"><div class="pair"><div class="mixe">AXTSUK</div><div class="es">Cortar con cuchillo</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/161.mp3"><div class="row"><div class="pair"><div class="mixe">AXUK</div><div class="es">Enredo (prenda)</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/162.mp3"><div class="row"><div class="pair"><div class="mixe">AXUUTS</div><div class="es">Estrecho</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/163.mp3"><div class="row"><div class="pair"><div class="mixe">AXUY</div><div class="es">Coser tela o costal</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/165.mp3"><div class="row"><div class="pair"><div class="mixe">AXUYËY</div><div class="es">Remendado</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/166.mp3"><div class="row"><div class="pair"><div class="mixe">AXWA’ATS</div><div class="es">Desnudo</div></div></div></div>
+
+<div class="word-card" tabindex="0" data-audio="../Letra-A/171.mp3"><div class="row"><div class="pair"><div class="mixe">AY</div><div class="es">Hermano mayor de la mujer</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/172.mp3"><div class="row"><div class="pair"><div class="mixe">AYAAXP</div><div class="es">Grita</div></div></div></div>
+<div class="word-card" tabindex="0" data-audio="../Letra-A/173.mp3"><div class="row"><div class="pair"><div class="mixe">AYAAXY</div><div class="es">Llorona</div></div></div></div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="unlock" id="unlock" aria-hidden="true">
+    <div class="unlock-card" role="dialog" aria-modal="true" aria-labelledby="unlockTitle">
+      <h2 id="unlockTitle">Activar audio</h2>
+      <p>Por seguridad del navegador, el audio requiere 1 toque inicial.<br/>Después podrás reproducir con solo tocar.</p>
+      <button class="unlock-btn" id="unlockBtn" type="button">✅ Tocar para activar</button>
+    </div>
+  </div>
+
+  <script>
+    if (window.self !== window.top) {
+      document.body.classList.add("in-iframe");
+    }
+
+    const isTouch =
+      window.matchMedia?.("(pointer: coarse)")?.matches ||
+      "ontouchstart" in window ||
+      navigator.maxTouchPoints > 0;
+
+    if (isTouch) document.body.classList.add("is-touch");
+
+    const unlock = document.getElementById("unlock");
+    const unlockBtn = document.getElementById("unlockBtn");
+
+    const player = new Audio();
+    player.preload = "auto";
+    let audioUnlocked = false;
+
+    function showUnlock(){
+      unlock.classList.add("show");
+      unlock.setAttribute("aria-hidden", "false");
+    }
+    function hideUnlock(){
+      unlock.classList.remove("show");
+      unlock.setAttribute("aria-hidden", "true");
+    }
+
+    async function unlockAudio(preloadSrc){
+      try{
+        if (preloadSrc) player.src = preloadSrc;
+        await player.play();
+        player.pause();
+        try{ player.currentTime = 0; }catch(e){}
+        audioUnlocked = true;
+        hideUnlock();
+      }catch(e){
+        showUnlock();
+      }
+    }
+
+    function haptic(){
+      if (isTouch && navigator.vibrate) navigator.vibrate(10);
+    }
+
+    function play(src){
+      if (isTouch && !audioUnlocked){
+        showUnlock();
+        return;
+      }
+
+      const abs = new URL(src, window.location.href).href;
+      if (player.src !== abs) player.src = src;
+
+      try{ player.currentTime = 0; }catch(e){}
+      player.play().then(() => haptic()).catch(()=>{});
+    }
+
+    if (isTouch) {
+      setTimeout(() => showUnlock(), 500);
+    } else {
+      audioUnlocked = true;
+    }
+
+    unlockBtn.addEventListener("click", async () => {
+      await unlockAudio("../Letra-M/M_word_1.wav");
+    });
+
+    document.querySelectorAll("[data-audio]").forEach(card => {
+      const src = card.getAttribute("data-audio");
+
+      if (isTouch){
+        card.addEventListener("pointerdown", () => play(src), { passive: true });
+        card.addEventListener("click", () => play(src));
+      } else {
+        card.addEventListener("pointerenter", () => play(src));
+        card.addEventListener("focus", () => play(src));
+        card.addEventListener("click", () => play(src));
+      }
+    });
+  </script>
+</body>
+</html>
